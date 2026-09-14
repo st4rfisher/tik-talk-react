@@ -1,9 +1,9 @@
 import { redirect } from 'react-router'
 
-import { hasAccessToken } from '@/entities/session'
+import { tokenStorage } from '@/entities/session'
 
 export function requireAuth() {
-  if (!hasAccessToken()) {
+  if (!tokenStorage.hasAccessToken()) {
     throw redirect('/login')
   }
 

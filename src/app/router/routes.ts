@@ -1,12 +1,13 @@
 import { createBrowserRouter, redirect } from 'react-router'
 
-import { requireAuth } from '@/app/router/guards'
+import { MainLayout } from '@/app/layouts'
 import { LoginPage } from '@/pages/LoginPage'
 import { ProfilePage } from '@/pages/ProfilePage'
 import { SearchPage } from '@/pages/SearchPage'
 import { SettingsPage } from '@/pages/SettingsPage'
-import { ChatPage, ChatsPage, NewChatPage } from '@/pages/chats'
-import { AppLayout } from '@/widgets/AppLayout'
+import { ChatPage, ChatsPage, NewChatPage } from '@/pages/Сhats'
+
+import { requireAuth } from './guards'
 
 export const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     loader: requireAuth,
-    Component: AppLayout,
+    Component: MainLayout,
     children: [
       {
         index: true,
