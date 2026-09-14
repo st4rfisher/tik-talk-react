@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      '@uiKit': fileURLToPath(new URL('./src/shared/ui/components', import.meta.url)),
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
