@@ -18,11 +18,11 @@
 |---|---|
 | Сборка | Vite + React 19 + TypeScript |
 | Монорепо | не нужен |
-| Маршруты, layout, guard | TanStack Router |
+| Маршруты, layout, guard | React Router (data router) |
 | HTTP, JWT, refresh | Axios |
 | Кэш API (серверный стейт) | TanStack Query |
 | Глобальный клиентский store | Zustand (подключать по необходимости) |
-| Cookie | js-cookie |
+| Cookie | `shared/lib/cookie.ts` (js-cookie, когда понадобится запись) |
 | Формы | React Hook Form + Zod |
 | WebSocket | native WebSocket |
 | Infinite scroll | Intersection Observer |
@@ -72,6 +72,17 @@ pages → widgets → features → entities → shared
 
 Единственное место, где всё сшивается: провайдеры (`QueryClient`, Router), дерево роутов, guard, глобальный SCSS, env.
 
+```
+app/
+├── router/
+│   ├── routes.ts     # createBrowserRouter
+│   ├── guards.ts     # requireAuth: нет токена → redirect('/login')
+│   └── index.ts      # публичный API: router
+└── styles/
+```
+
+Guard знает про карту маршрутов (`/login`) и про API роутера, поэтому живёт здесь, а не в `entities/session`. Сущность отвечает только на вопрос «есть ли токен».
+
 ### `pages/`
 
 Тонкие экраны под URL: `login`, `profile`, `settings`, `search`, `chats`. Собирают виджеты и фичи, почти без логики.
@@ -88,6 +99,8 @@ pages → widgets → features → entities → shared
 
 Модель предметной области: `profile`, `post`, `chat`, `session`.  
 Типы, функции API (`getMyAccount`), Query-ключи (`['profile', 'me']`), карточка сущности.
+
+`entities/session` — единственное место, знающее имена cookie (`token`, `refreshToken`): `getAccessToken`, `getRefreshToken`, `hasAccessToken`. Этими же геттерами пользуется axios-интерцептор.
 
 ### `shared/`
 
@@ -135,7 +148,7 @@ pages → widgets → features → entities → shared
 | Angular | React |
 |---|---|
 | Angular 18 | React 19 |
-| `@angular/router` + `accessGuard` | TanStack Router, `beforeLoad` |
+| `@angular/router` + `accessGuard` | React Router `createBrowserRouter`, guard в `loader` |
 | `HttpClient` + interceptor | Axios + interceptor |
 | NgRx Store / Effects | TanStack Query |
 | `@angular/forms` + CVA | React Hook Form + `Controller` |
@@ -163,7 +176,7 @@ RxJS не обязателен: для сокета достаточно native 
 2. **React 19** — UI, хуки, ререндер.
 3. **TypeScript** — типы; `interfaces` копируются.
 4. **SCSS + public** — внешний вид.
-5. **TanStack Router** — куда идёт пользователь, layout, lazy, guard.
+5. **React Router** — куда идёт пользователь, layout, lazy, guard (`loader` родительского роута выполняется раньше дочерних).
 6. **Axios** — как сходить на сервер (JWT, refresh-очередь, пропуск dadata.ru).
 7. **TanStack Query** — данные с API: кэш, loading, refetch, infinite query, invalidate после мутаций.
 8. **Zustand** — только клиентский глобальный стейт (сокет, токен в памяти, UI-флаги). Не для `GET /account/me` и `GET /post/`.
@@ -176,7 +189,7 @@ RxJS не обязателен: для сокета достаточно native 
 Поток одного запроса:
 
 ```
-Роут (TanStack Router)
+Роут (React Router)
   → useQuery (есть ли кэш)
     → axios (Bearer, refresh)
       → ответ в кэш Query
@@ -189,7 +202,7 @@ RxJS не обязателен: для сокета достаточно native 
 
 ```
 /login                         без guard
-/                              beforeLoad: нет токена → /login
+/                              loader: нет токена → /login
   layout (сайдбар + WS)
     /              → redirect /profile/me
     /profile/:id
@@ -209,7 +222,7 @@ RxJS не обязателен: для сокета достаточно native 
 1. **Каркас** — Vite + React + TS, алиас `@/`, перенос `public/`, SCSS, env, `interfaces`/`shared`.
 2. **Axios** — `baseURL`, Bearer, skip dadata, очередь refresh на 403. Проверка: `GET /account/me`.
 3. **Session** — login / logout / cookie. Аналог `AuthService`.
-4. **Роутер** — `/login` и оболочка `/` с `beforeLoad`. Логин → `/profile/me`.
+4. **Роутер** — `/login` и оболочка `/` с guard в `loader`. Логин → `/profile/me`.
 5. **Первый экран** — свой профиль: `useQuery(['profile','me'])`.
 
 Критерий старта: логин пишет cookie, профиль открывается с API, 403 обновляет токен, а не сразу выкидывает на логин.
@@ -226,4 +239,4 @@ Zustand — в момент чатов, не в день 1.
 3. **WS** — открывать сокет только после чтения cookie; на logout закрывать.
 4. **`:host` в SCSS** — в React это корневой `className` компонента.
 5. **SVG-иконки** — селектор `svg[icon]` заменить на компонент `<Icon name="chat" />`, ассеты те же.
-6. **Redirect `/chats`** на `lastActiveChatId` — делать в `beforeLoad`, не строкой в `redirectTo`.
+6. **Redirect `/chats`** на `lastActiveChatId` — делать в `loader` через `throw redirect(...)`, не строкой в `redirectTo`.
