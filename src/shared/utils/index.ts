@@ -1,2 +1,2 @@
-export { getCookie } from './_cookie'
-export { replacePrefix } from './_url'
+export { getCookie, removeCookie, setCookie } from './cookie'
+export { replacePrefix } from './url'
