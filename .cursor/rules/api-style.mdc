@@ -1,0 +1,42 @@
+---
+description: Оформление API-модулей — один объект с методами
+globs: src/**/api/**/*.ts
+alwaysApply: false
+---
+
+# API слайса
+
+Запросы собираем в один объект `<домен>Api` с асинхронными методами, а не в набор
+отдельных функций. Имя объекта — camelCase по имени файла (`api/auth.ts` → `authApi`).
+Так на месте вызова видно источник данных и не конфликтуют общие имена
+вроде `login` или `getAll`.
+
+```ts
+// ❌
+export async function login(payload: LoginPayload) {}
+export async function logout() {}
+
+// ✅
+export const authApi = {
+  async login(payload: LoginPayload): Promise<TokenResponse> {
+    const { data } = await api.post<TokenResponse>('/auth/token', new URLSearchParams(payload))
+    saveTokens(data)
+
+    return data
+  },
+
+  async logout(): Promise<void> {},
+}
+```
+
+Внутри методов не используем `this` — соседний метод зовём через имя объекта
+(`authApi.refreshTokens()`), иначе деструктуризация объекта ломает вызов.
+
+Запросы идут через инстанс из `@/shared/api`, URL и типы ответа живут здесь же.
+Работа с cookie, токенами и прочим состоянием — не в API, а в `model/`.
+
+Объект экспортируем из `index.ts` слайса:
+
+```ts
+export { authApi } from './api/auth'
+```

@@ -1,0 +1,42 @@
+---
+description: Границы слайсов FSD — публичный API и направление импортов
+globs: src/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Границы слайсов
+
+Внутреннее от внешнего отделяет папка с `index.ts`, а не имя файла.
+Без префиксов `_` — публичность задаётся тем, что реэкспортировано.
+
+## Путь импорта показывает, откуда идёт вызов
+
+Внутри своей папки — относительный путь. Снаружи — алиас на публичный API:
+
+```ts
+// ❌ внутри app/router/routes.ts
+import { requireAuth } from '@/app/router/guards'
+// ❌ мимо публичного API слайса
+import { getCookie } from '@/shared/utils/cookie'
+
+// ✅ сосед по папке
+import { requireAuth } from './guards'
+// ✅ вход через index.ts
+import { getCookie } from '@/shared/utils'
+import { hasAccessToken } from '@/entities/session'
+```
+
+Порядок в файле: пакеты → алиасы `@/` → относительные, между группами пустая строка.
+
+Файлы хуков — camelCase, как имя функции: `useLogin.ts`, не `use-login.ts`.
+
+## Направление
+
+Импорты только вниз: `pages → widgets → features → entities → shared`.
+Слайсы одного слоя друг друга не импортируют.
+
+## shared
+
+Общего `shared/index.ts` не делаем — публичный API держим на уровне модуля
+или сегмента: `@/shared/ui/components/Input`, `@/shared/utils`.
+Сквозной barrel там даёт циклические импорты и тормозит dev-сервер.

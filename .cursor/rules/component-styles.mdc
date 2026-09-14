@@ -1,0 +1,48 @@
+---
+description: Стили и классы React-компонентов (CSS Modules + clsx)
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Стили компонентов
+
+Стили компонента лежат рядом с ним в `Component.module.scss` и импортируются как `styles`.
+
+Имена классов в scss сохраняем из исходной вёрстки, включая кебаб-кейс и BEM-модификаторы
+(`&--action`). `:host` не переносим — в React его роль играет корневой элемент компонента.
+
+## Обращение к классам
+
+Всегда через скобочную нотацию, даже когда точечная возможна:
+
+```tsx
+// ❌
+<label className={styles.label}>
+
+// ✅
+<label className={styles['label']}>
+```
+
+## Склейка классов
+
+Несколько классов, условные модификаторы и внешний `className` — только через `clsx`,
+не шаблонными строками и не `.filter(Boolean).join(' ')`:
+
+```tsx
+// ❌
+className={[styles['input'], className].filter(Boolean).join(' ')}
+className={`button ${isActive ? styles['button--active'] : ''}`}
+
+// ✅
+className={clsx('button', styles['button--action'], isActive && styles['button--active'])}
+```
+
+Если класс один — оставляем как есть, без `clsx` и без шаблонной строки:
+
+```tsx
+// ❌
+className={`${styles['input-wrapper']}`}
+
+// ✅
+className={styles['input-wrapper']}
+```
