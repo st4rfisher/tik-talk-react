@@ -1,0 +1,12 @@
+.subscriber-card {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  grid-gap: 12px;
+  padding: 16px 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.sub-title {
+  color: var(--light-color);
+}
