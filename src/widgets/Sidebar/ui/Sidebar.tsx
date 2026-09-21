@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { Link, NavLink } from 'react-router'
+import { Avatar } from '@uiKit/Avatar'
 import { Icon } from '@uiKit/Icon'
 
 import { menuItems } from '../model/menu'
@@ -46,13 +47,7 @@ export function Sidebar() {
       <footer className={styles['footer']}>
         {/* TODO: свой профиль из entities/profile — аватар через imageUrl и username */}
         <div className={styles['user']}>
-          <img
-            className="avatar"
-            src="/assets/images/default-avatar.svg"
-            alt=""
-            width="32"
-            height="32"
-          />
+          <Avatar size={32} />
           <span className="sub-title">Профиль</span>
           {/* TODO: features/logout — очистить токены перед переходом на /login */}
           <Link className={clsx('button', 'button--action-danger')} to="/login">
