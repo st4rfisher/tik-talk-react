@@ -1,4 +1,5 @@
 export { profileApi } from './api/profile'
+export { profileQueries } from './model/profileQueries'
 export { ProfileHeader } from './ui/ProfileHeader/ProfileHeader'
 export { SubscriberCard } from './ui/SubscriberCard/SubscriberCard'
 export type { Profile } from './model/types'
