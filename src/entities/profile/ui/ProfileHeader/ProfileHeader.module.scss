@@ -1,5 +1,17 @@
-.profile-header {
+.profile-header,
+.skeleton-user {
   display: grid;
-  grid-template-columns: 112px 1fr;
-  grid-gap: 24px;
+  align-items: center;
+  grid-template-columns: 112px 1fr auto;
+  column-gap: 24px;
+  width: 100%;
+}
+
+.skeleton-user {
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: auto;
+  }
 }

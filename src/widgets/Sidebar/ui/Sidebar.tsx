@@ -1,12 +1,17 @@
 import clsx from 'clsx'
 import { Link, NavLink } from 'react-router'
+
 import { Avatar } from '@uiKit/Avatar'
 import { Icon } from '@uiKit/Icon'
+
+import { useProfile } from '@/entities/profile'
 
 import { menuItems } from '../model/menu'
 import styles from './Sidebar.module.scss'
 
 export function Sidebar() {
+  const { data: profile, isPending } = useProfile('me')
+
   return (
     <aside className={styles['sidebar']}>
       <img
@@ -23,7 +28,7 @@ export function Sidebar() {
               <NavLink
                 className={({ isActive }) =>
                   clsx(
-                    styles['menu-button'], 
+                    styles['menu-button'],
                     isActive && styles['active']
                   )
                 }
@@ -45,18 +50,24 @@ export function Sidebar() {
       </Link>
 
       <footer className={styles['footer']}>
-        {/* TODO: свой профиль из entities/profile — аватар через imageUrl и username */}
-        <div className={styles['user']}>
-          <Avatar size={32} />
-          <span className="sub-title">Профиль</span>
-          {/* TODO: features/logout — очистить токены перед переходом на /login */}
-          <Link className={clsx('button', 'button--action-danger')} to="/login">
-            <Icon iconName="exit" width="20" height="20" />
-          </Link>
-          <Link className={clsx('button', 'button--action')} to="/settings">
-            <Icon iconName="settings" width="20" height="20" />
-          </Link>
-        </div>
+        {isPending ? (
+          <div className={styles['skeleton-user']}>
+            <div className={styles['skeleton-user__avatar']} />
+            <div className={styles['skeleton-user__line']} />
+          </div>
+        ) : (
+          <div className={styles['user']}>
+            <Avatar url={profile?.avatarUrl} size={32} />
+            <span className="sub-title">{profile?.username ?? 'Профиль'}</span>
+            {/* TODO: features/logout — очистить токены перед переходом на /login */}
+            <Link className={clsx('button', 'button--action-danger')} to="/login">
+              <Icon iconName="exit" width="20" height="20" />
+            </Link>
+            <Link className={clsx('button', 'button--action')} to="/settings">
+              <Icon iconName="settings" width="20" height="20" />
+            </Link>
+          </div>
+        )}
       </footer>
     </aside>
   )

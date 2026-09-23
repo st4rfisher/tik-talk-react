@@ -3,34 +3,23 @@ import { Link, useParams } from 'react-router'
 
 import { Icon } from '@uiKit/Icon'
 
+import { ProfileHeader, useProfile } from '@/entities/profile'
+
 import styles from './ProfilePage.module.scss'
 
 export function ProfilePage() {
   const { id } = useParams()
-  // TODO: сравнивать ещё и с id своего профиля, когда появится запрос профиля
-  const isMyPage = id === 'me'
+  const { data: profile, isMyProfile } = useProfile(id)
 
   return (
     <>
       <header className={styles['header']}>
-        {/* TODO: ProfileHeader из entities/profile + скелетон на загрузке */}
-        {isMyPage ? (
-          <Link className={clsx('button', 'button--primary')} to="/settings">
-            Редактировать
-            <Icon iconName="settings" width="16" height="16" />
-          </Link>
-        ) : (
-          // TODO: переход на /chats/new?userId=<id профиля>
-          <button type="button" className={clsx('button', 'button--primary')}>
-            Написать
-            <Icon iconName="send" width="16" height="16" />
-          </button>
-        )}
+        <ProfileHeader id={id} />
       </header>
 
       <div className={styles['main']}>
         <div className={styles['left-side']}>
-          {isMyPage ? (
+          {isMyProfile ? (
             // TODO: лента постов — widgets/PostFeed
             null
           ) : (
@@ -45,7 +34,9 @@ export function ProfilePage() {
           <div className={styles['block']}>
             <h3 className={clsx('h6', styles['h6'])}>
               Подписчики
-              {/* TODO: количество подписчиков в span.subscribers-count */}
+              {profile ? (
+                <span className={styles['subscribers-count']}>{profile.subscribersAmount}</span>
+              ) : null}
             </h3>
             {/* TODO: подписчики из entities/profile — аватары со ссылкой на /profile/:id */}
             <Link className={styles['subscribers-button']} to="/search">
@@ -55,12 +46,18 @@ export function ProfilePage() {
 
           <div className={styles['block']}>
             <h3 className={clsx('h6', styles['h6'])}>Навыки</h3>
-            {/* TODO: profile.stack — по тегу span.tag на навык */}
+            {profile?.stack?.map((skill) => (
+              <span key={skill} className="tag">
+                {skill}
+              </span>
+            ))}
           </div>
 
           <div className={styles['block']}>
             <h3 className={clsx('h6', styles['h6'])}>О себе</h3>
-            {/* TODO: profile.description в p.medium-text */}
+            {profile?.description ? (
+              <p className="medium-text">{profile.description}</p>
+            ) : null}
           </div>
         </div>
       </div>

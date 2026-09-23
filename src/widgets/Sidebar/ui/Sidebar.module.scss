@@ -73,8 +73,32 @@
 
 .skeleton-user {
   grid-template-columns: 32px 1fr;
+
+  &__avatar,
+  &__line {
+    background-color: var(--dark-grey);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+
+  &__line {
+    height: 16px;
+    width: 80%;
+    border-radius: 4px;
+  }
 }
 
 .user {
   grid-template-columns: 32px 1fr 24px 24px;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
 }
