@@ -1,0 +1,218 @@
+import os
+import uuid
+from typing import Annotated
+
+from fastapi import APIRouter, status, HTTPException, Depends, UploadFile, File
+from fastapi_pagination import Page, paginate
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from application.account.helpers import get_current_active_user
+from application.account.models import User
+from application.account.schemas.user_schemas import UserReadSchemaShort
+from application.community.crud import get_all_communities, get_community_by_id, \
+    create_community as create_community_db, update_community as update_community_db, \
+    delete_community as delete_community_db, delete_community_image_in_db, \
+    upload_community_image_in_db, get_community_subscribers as get_community_subscribers_db, upd_subscribers
+from application.community.models import ImageType
+from application.community.schemas import CommunityReadSchema, CommunityCreateSchema, CommunityUpdateSchema, \
+    PostReadSchema, CommunityShortReadSchema
+from application.community.services import update_author_from_community
+from application.community.validators import validate_community_admin
+from application.post.models import Post
+from application.utils import delete_image_by_path
+from database.db import get_async_session
+from fastapi_limiter.depends import RateLimiter
+from settings import settings
+
+LIMITER_DEPENDS = Depends(RateLimiter(times=settings.LIMIT_TIMES, seconds=settings.LIMIT_SEC))
+
+router = APIRouter(
+    tags=['community'],
+    prefix='/community',
+    include_in_schema=True
+)
+
+IMAGE_DIR = 'static/community'
+
+IMAGE_EXTENSIONS = [
+    'bmp', 'gif', 'ico', 'ief', 'jpe', 'jpeg', 'jpg',
+    'pbm', 'pgm', 'png', 'pnm', 'ppm', 'ras', 'rgb',
+    'svg', 'tif', 'tiff', 'xbm', 'xpm', 'xwd'
+]
+
+
+@router.get('/', status_code=status.HTTP_200_OK, dependencies=[LIMITER_DEPENDS])
+async def get_communities(name: str | None = None, themes: str | None = None, tags: str | None = None,
+                          user: User = Depends(get_current_active_user),
+                          session: AsyncSession = Depends(get_async_session)) -> Page[CommunityShortReadSchema]:
+    return paginate(await get_all_communities(name=name, themes=themes, tags=tags, user=user, session=session))
+
+
+@router.get('/{community_id}', status_code=status.HTTP_200_OK, response_model=CommunityReadSchema, dependencies=[LIMITER_DEPENDS])
+async def get_community(community_id: int, user: User = Depends(get_current_active_user),
+                        session: AsyncSession = Depends(get_async_session)):
+
+    if community := await get_community_by_id(community_id=community_id, user=user, session=session):
+        return await update_author_from_community(community)
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Community not found')
+
+
+@router.get('/{community_id}/posts', status_code=status.HTTP_200_OK,
+            dependencies=[LIMITER_DEPENDS])
+async def get_community_posts(community_id: int, user: User = Depends(get_current_active_user), session: AsyncSession = Depends(get_async_session))  \
+        -> Page[PostReadSchema]:
+
+    if community := await get_community_by_id(community_id=community_id, user=user, session=session):
+        sorted_posts = sorted(community.posts, key=lambda post: post.id, reverse=True)
+        posts = []
+
+        for post in sorted_posts:
+            model = PostReadSchema.model_validate(post)
+            model.author = CommunityShortReadSchema.model_validate(community)
+            posts.append(model)
+
+        return paginate(posts)
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Community not found')
+
+
+@router.get('/subscribers/{community_id}',
+            dependencies=[Depends(get_current_active_user), LIMITER_DEPENDS])
+async def get_community_subscribers(community_id: int,
+                                    session: AsyncSession = Depends(get_async_session)) -> Page[UserReadSchemaShort]:
+    return paginate(await get_community_subscribers_db(community_id=community_id, session=session))
+
+
+@router.post('/', status_code=status.HTTP_201_CREATED, response_model=CommunityReadSchema, dependencies=[LIMITER_DEPENDS])
+async def create_community(community: CommunityCreateSchema, user: Annotated[User, Depends(get_current_active_user)],
+                           session: AsyncSession = Depends(get_async_session)):
+    return await create_community_db(community=community, user=user, session=session)
+
+
+@router.patch('/{community_id}', status_code=status.HTTP_200_OK, response_model=CommunityReadSchema, dependencies=[LIMITER_DEPENDS])
+async def update_community(community_id: int, community: CommunityUpdateSchema,
+                           user: Annotated[User, Depends(get_current_active_user)],
+                           session: AsyncSession = Depends(get_async_session)):
+    old_community = await get_community_by_id(community_id=community_id, user=user, session=session)
+
+    if not old_community:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Community not found')
+
+    await validate_community_admin(user=user, community=old_community)
+
+    await update_community_db(community_id=community_id, community=community, session=session)
+
+    return await update_author_from_community(await get_community_by_id(community_id=community_id, user=user, session=session))
+
+
+@router.delete('/{community_id}', status_code=status.HTTP_204_NO_CONTENT, dependencies=[LIMITER_DEPENDS])
+async def delete_community(community_id: int, user: Annotated[User, Depends(get_current_active_user)],
+                           session: AsyncSession = Depends(get_async_session)):
+    community = await get_community_by_id(community_id=community_id, user=user, session=session)
+
+    if not community:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Community not found')
+
+    await validate_community_admin(user=user, community=community)
+
+    await delete_community_db(community_id=community_id, user=user, session=session)
+
+
+@router.post('/{community_id}/join', status_code=status.HTTP_200_OK, dependencies=[LIMITER_DEPENDS])
+async def join_community(community_id: int, user: Annotated[User, Depends(get_current_active_user)],
+                         session: AsyncSession = Depends(get_async_session)):
+    community = await get_community_by_id(community_id=community_id, user=user, session=session)
+
+    if community.admin_id == user.id:
+        return {'message': f"It's your community! You are already subscribed"}
+
+    if user.id not in community.subscribers:
+        community.subscribers.append(user.id)
+
+        await upd_subscribers(community_id=community_id,
+                              subscribers=community.subscribers,
+                                  session=session)
+
+        return {'message': f'You are now subscribed'}
+
+    else:
+        return {'message': f'You are already subscribed'}
+
+
+@router.delete('/{community_id}/join', status_code=status.HTTP_202_ACCEPTED, dependencies=[LIMITER_DEPENDS])
+async def leave_community(community_id: int, user: Annotated[User, Depends(get_current_active_user)],
+                          session: AsyncSession = Depends(get_async_session)):
+    community = await get_community_by_id(community_id=community_id, user=user, session=session)
+
+    if community.admin_id == user.id:
+        return {'message': f"It's your community! You are not to unsubscribe"}
+
+    if user.id in community.subscribers and community.admin_id != user.id:
+        community.subscribers.remove(user.id)
+
+        await upd_subscribers(community_id=community_id,
+                              subscribers=community.subscribers,
+                                  session=session)
+
+        return {'message': f'You are now unsubscribed'}
+
+    else:
+        return {'message': f'You are not subscribed'}
+
+
+@router.post('/upload_image/{community_id}', status_code=status.HTTP_200_OK, response_model=CommunityReadSchema, dependencies=[LIMITER_DEPENDS])
+async def upload_image(community_id: int, image_type: ImageType,
+                       user: Annotated[User, Depends(get_current_active_user)],
+                       image: UploadFile = File(...),
+                       session: AsyncSession = Depends(get_async_session)):
+    community = await get_community_by_id(community_id=community_id, user=user,  session=session)
+
+    await validate_community_admin(user=user, community=community)
+
+    image_content = await image.read()
+    image_format = image.filename.split('.')[-1]
+
+    if image_format.lower() not in IMAGE_EXTENSIONS:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f'Image format {image_format} is not supported')
+
+    random_str = str(uuid.uuid4())
+
+    match image_type:
+        case ImageType.BANNER:
+            delete_image_by_path(image_path=community.banner_url)
+            filename = f"{community_id}_banner_{random_str[:8]}.{image_format}"
+        case ImageType.AVATAR:
+            delete_image_by_path(image_path=community.avatar_url)
+            filename = f"{community_id}_avatar_{random_str[:8]}.{image_format}"
+
+    image_url = os.path.join(IMAGE_DIR, filename)
+
+    if not os.path.exists(IMAGE_DIR):
+        os.mkdir(IMAGE_DIR)
+
+    with open(image_url, 'wb') as f:
+        f.write(image_content)
+
+    match image_type:
+        case ImageType.BANNER:
+            await upload_community_image_in_db(community_id=community_id, image_url=image_url, img_type=ImageType.BANNER,
+                                     session=session)
+        case ImageType.AVATAR:
+            await upload_community_image_in_db(community_id=community_id, image_url=image_url, img_type=ImageType.AVATAR,
+                                     session=session)
+
+    return await get_community_by_id(community_id=community_id, user=user, session=session)
+
+
+@router.delete('/delete_image/{community_id}', status_code=status.HTTP_202_ACCEPTED, response_model=CommunityReadSchema, dependencies=[LIMITER_DEPENDS])
+async def delete_image(community_id: int, image_type: ImageType,
+                       user: Annotated[User, Depends(get_current_active_user)],
+                       session: AsyncSession = Depends(get_async_session)):
+    community = await get_community_by_id(community_id=community_id, user=user, session=session)
+    await validate_community_admin(user=user, community=community)
+
+    await delete_community_image_in_db(community=community, img_type=image_type, session=session)
+
+    return await get_community_by_id(community_id=community_id, user=user, session=session)

@@ -1,0 +1,89 @@
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from application.account.crud import get_user_by_id
+from application.account.helpers import get_current_active_user
+from application.account.models import User
+from application.message.crud import insert_message, get_message, update_message, delete_message
+from application.message.schemas import MessageReadSchema
+from application.message.validators import is_not_my_chat
+from application.personal_chat.crud import get_personal_chat
+from application.personal_chat.ws_manager import manager
+from database.db import get_async_session
+
+from fastapi_limiter.depends import RateLimiter
+from settings import settings
+
+LIMITER_DEPENDS = Depends(RateLimiter(times=settings.LIMIT_TIMES, seconds=settings.LIMIT_SEC))
+
+router = APIRouter(
+    tags=['message'],
+    prefix='/message',
+
+)
+
+
+@router.post('/send/{chat_id}', response_model=MessageReadSchema, status_code=status.HTTP_201_CREATED, dependencies=[LIMITER_DEPENDS])
+async def send_message(chat_id: int, message: str, current_user: Annotated[User, Depends(get_current_active_user)],
+                       session: AsyncSession = Depends(get_async_session)):
+    personal_chat = await get_personal_chat(chat_id=chat_id, session=session)
+
+    if personal_chat is None:
+        raise HTTPException(status_code=404, detail='Chat not found')
+
+    if await is_not_my_chat(chat=personal_chat, user_id=current_user.id):
+        raise HTTPException(status_code=403, detail="This is not your chat")
+
+    get_user_id = personal_chat.user_first_id \
+        if personal_chat.user_first_id != current_user.id else personal_chat.user_second_id
+
+    message_id = await insert_message(chat_id=chat_id, text=message, user_id=current_user.id, session=session)
+
+    personal_chat = await get_personal_chat(chat_id=chat_id, session=session)
+
+    bots_ids = [123, 124, 125, 126, 127]
+    if personal_chat.user_first_id in bots_ids:
+        await insert_message(chat_id=chat_id, text=message, user_id=personal_chat.user_first_id, session=session)
+
+    if get_user_id in manager.user_connections.keys():
+        get_user = await get_user_by_id(user_id=get_user_id, session=session)
+        await manager.send_message_to_chat(message={
+            'chat_id': chat_id,
+            'text': message,
+        }, websocket=manager.user_connections[get_user_id],
+            user=get_user)
+
+    return await get_message(message_id=message_id, session=session)
+
+
+@router.get('/{message_id}', response_model=MessageReadSchema, dependencies=[Depends(get_current_active_user), LIMITER_DEPENDS],
+            status_code=status.HTTP_200_OK)
+async def get_my_message(message_id: int, session: AsyncSession = Depends(get_async_session)):
+    if message := await get_message(message_id=message_id, session=session):
+        return message
+
+    else:
+        raise HTTPException(status_code=404, detail='Message not found')
+
+
+@router.patch('/{message_id}', response_model=MessageReadSchema, status_code=status.HTTP_202_ACCEPTED, dependencies=[LIMITER_DEPENDS])
+async def patch_my_message(message_id: int, text: str, current_user: Annotated[User, Depends(get_current_active_user)],
+                           session: AsyncSession = Depends(get_async_session)):
+    if (await get_message(message_id=message_id, session=session)).user_from_id != current_user.id:
+        raise HTTPException(status_code=403, detail="This is not your message")
+
+    await update_message(message_id=message_id, text=text, session=session)
+
+    return await get_message(message_id=message_id, session=session)
+
+
+@router.delete('/{message_id}',  status_code=status.HTTP_204_NO_CONTENT, dependencies=[LIMITER_DEPENDS])
+async def delete_my_message(message_id: int, current_user: Annotated[User, Depends(get_current_active_user)],
+                            session: AsyncSession = Depends(get_async_session)):
+    if (await get_message(message_id=message_id, session=session)).user_from_id != current_user.id:
+        raise HTTPException(status_code=403, detail="This is not your message")
+
+    await delete_message(message_id=message_id, session=session)
+

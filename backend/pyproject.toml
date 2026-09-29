@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "icher-angular-course"
+version = "0.1.0"
+description = ""
+authors = ["Herrifly <nani-4545@mail.ru>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = {extras = ["all"], version = "^0.111.0"}
+asyncpg = "^0.29.0"
+sqlalchemy = "^2.0.29"
+alembic = "^1.13.1"
+pillow = "^10.3.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+bcrypt = "3.2.2"
+random-username = "^1.0.2"
+fastapi-filter = "^2.0.0"
+fastapi-pagination = "^0.12.24"
+fastapi-limiter = "^0.1.6"
+redis = "^5.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

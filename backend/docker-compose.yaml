@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+    postgres:
+        container_name: angular_course_postgres
+        build: ./database
+
+        environment:
+          POSTGRES_USER: ${POSTGRES_USER}
+          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+          POSTGRES_DB: ${POSTGRES_DB}
+
+        env_file:
+          - .env
+
+        ports:
+          - "127.0.0.1:5433:5432"
+
+        volumes:
+          - angular_course_postgres_data:/var/lib/postgresql/data
+
+        restart: always
+
+    redis:
+      container_name: angular_course_redis
+      image: redis:7.2-alpine
+      volumes:
+        - angular_course_redis_data:/data
+
+      restart: always
+
+    backend:
+        container_name: angular_course_backend
+        build: .
+
+        env_file:
+          - .env
+
+        command: bash -c "alembic upgrade head && python fixtures.py && python create_ws_user.py \
+          && python add_subscribers.py && uvicorn app:app --host 0.0.0.0 --port 8000"
+
+        ports:
+          - 8000:8000
+
+        depends_on:
+          - postgres
+
+        volumes:
+          - angular_course_static:/backend/static
+
+        restart: always
+
+volumes:
+  angular_course_postgres_data:
+  angular_course_redis_data:
+  angular_course_static:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/static
+
