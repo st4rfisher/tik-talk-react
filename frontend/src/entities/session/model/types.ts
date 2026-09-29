@@ -3,6 +3,10 @@ export type TokenResponse = {
   refresh_token: string
 }
 
+export type Session = {
+  hasAccess: boolean
+}
+
 export type RetriableConfig = {
   isRetry?: boolean
 }

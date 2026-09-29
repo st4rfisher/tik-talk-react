@@ -1,16 +1,10 @@
 import axios from 'axios'
-import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
+
+import type { ApiInterceptors } from './types'
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
 })
-
-type ApiInterceptors = {
-  request: (
-    config: InternalAxiosRequestConfig,
-  ) => InternalAxiosRequestConfig | Promise<InternalAxiosRequestConfig>
-  responseError: (error: AxiosError) => unknown
-}
 
 let isInitialized = false
 
