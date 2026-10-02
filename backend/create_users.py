@@ -35,5 +35,35 @@ async def create_ws_user():
             await session.commit()
 
 
+async def create_dev_user():
+    stmt = select(User).filter(User.username == "test")
+
+    async with async_session() as session:
+        result = await session.execute(stmt)
+        user = result.scalar()
+
+        if not user:
+            hashed_password = get_password_hash("test")
+            session.add(User(
+                id=999,
+                username="test",
+                first_name="Test",
+                last_name="User",
+                avatar_url=None,
+                stack=[],
+                city=None,
+                description=None,
+                subscriptions=[],
+                hashed_password=hashed_password,
+                is_active=True,
+            ))
+            await session.commit()
+
+
+async def main():
+    await create_ws_user()
+    await create_dev_user()
+
+
 if __name__ == "__main__":
-    asyncio.run(create_ws_user())
+    asyncio.run(main())
