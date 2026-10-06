@@ -1,8 +1,7 @@
 import clsx from 'clsx'
 import { Link, NavLink } from 'react-router'
 
-import { Avatar } from '@uiKit/Avatar'
-import { Icon } from '@uiKit/Icon'
+import { Avatar, Icon, Skeleton, SkeletonList } from '@uiKit'
 
 import { useProfile } from '@/entities/profile'
 

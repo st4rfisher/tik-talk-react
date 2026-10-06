@@ -1,9 +1,7 @@
 import clsx from 'clsx'
 import { Link } from 'react-router'
 
-import { Avatar } from '@uiKit/Avatar'
-import { Icon } from '@uiKit/Icon'
-import { Skeleton } from '@uiKit/Skeletons'
+import { Avatar, Icon, Skeleton } from '@uiKit'
 
 import { useProfile } from '../../model/useProfile'
 import styles from './ProfileHeader.module.scss'

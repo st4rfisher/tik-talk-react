@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import { Avatar } from '@uiKit/Avatar'
+import { Avatar } from '@uiKit'
 
 import type { Profile } from '../../model/types'
 import styles from './SubscriberCard.module.scss'

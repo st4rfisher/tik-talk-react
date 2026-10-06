@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import type { ComponentProps, ReactNode } from 'react'
 
-import { Icon } from '@uiKit/Icon'
+import { Icon } from '../Icon'
 import styles from './Input.module.scss'
 
 type InputProps = ComponentProps<'input'> & { children?: ReactNode; error?: string }

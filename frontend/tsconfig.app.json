@@ -16,7 +16,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@uiKit/*": ["./src/shared/ui/components/*"],
+      "@uiKit": ["./src/shared/ui/components/index.ts"],
       "@/*": ["./src/*"]
     },
 

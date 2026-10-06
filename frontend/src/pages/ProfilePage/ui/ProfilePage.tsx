@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { Link, useParams } from 'react-router'
 
-import { Icon } from '@uiKit/Icon'
+import { Icon } from '@uiKit'
 
 import { ProfileHeader, useProfile } from '@/entities/profile'
 

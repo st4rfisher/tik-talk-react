@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import { Input } from '@uiKit/Input'
+import { Input } from '@uiKit'
 
 import { useLogin } from '../model/useLogin'
 import styles from './LoginForm.module.scss'
