@@ -9,12 +9,12 @@ export function checkIsMyProfile(id: string | undefined, profile: Profile | unde
 
 export function useProfile(id: string | undefined) {
   const profileQuery = useQuery({
-    ...profileQueries.byId(id ?? ''),
+    ...profileQueries.getProfileById(id ?? ''),
     enabled: Boolean(id),
   })
 
   const myProfileQuery = useQuery({
-    ...profileQueries.byId('me'),
+    ...profileQueries.getProfileById('me'),
   })
 
   return {
