@@ -11,4 +11,10 @@ export const profileQueries = {
         : profileApi.getAccount(id)
       ),
     }),
+
+  getSubscribers: (limit = 3) =>
+    queryOptions({
+      queryKey: ['profile', 'subscribers', limit] as const,
+      queryFn: () => profileApi.getSubscribersShortList(limit),
+    }),
 }

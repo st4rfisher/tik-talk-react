@@ -43,6 +43,15 @@
   text-overflow: ellipsis;
 }
 
+.subscriber-skeleton {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  grid-gap: 12px;
+  padding: 16px 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+
 .to-subscribers-link {
   display: inline-flex;
   column-gap: 8px;

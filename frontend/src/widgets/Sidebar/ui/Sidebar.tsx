@@ -1,15 +1,19 @@
 import clsx from 'clsx'
+import { useQuery } from '@tanstack/react-query'
 import { Link, NavLink } from 'react-router'
 
 import { Avatar, Icon, Skeleton, SkeletonList } from '@uiKit'
 
-import { useProfile } from '@/entities/profile'
+import { SubscriberCard, profileQueries, useProfile } from '@/entities/profile'
 
 import { menuItems } from '../model/menu'
 import styles from './Sidebar.module.scss'
 
 export function Sidebar() {
   const { data: profile, isPending } = useProfile('me')
+  const { data: subscribers, isPending: isSubscribersPending } = useQuery(
+    profileQueries.getSubscribers(),
+  )
 
   return (
     <aside className={styles['sidebar']}>
@@ -42,7 +46,19 @@ export function Sidebar() {
       </nav>
 
       <p className={clsx('medium-text', styles['medium-text'])}>Подписчики</p>
-      {/* TODO: список подписчиков из entities/profile через useQuery + скелетон на загрузке */}
+      {isSubscribersPending ? (
+        <SkeletonList
+          skeletonCount={3}
+          className={styles['subscriber-skeleton']}
+        >
+          <Skeleton variant="circle" width="32px" height="32px" />
+          <Skeleton width="80%" height="16px" />
+        </SkeletonList>
+      ) : (
+        subscribers?.map((subscriber) => (
+          <SubscriberCard key={subscriber.id} profile={subscriber} />
+        ))
+      )}
       <Link className={styles['to-subscribers-link']} to="/subscribers">
         Все подписчики
         <Icon iconName="arrow" width="20" height="20" />
