@@ -12,9 +12,9 @@ export const profileQueries = {
       ),
     }),
 
-  getSubscribers: (limit = 3) =>
+  getSubscribersList: (limit = 3) =>
     queryOptions({
       queryKey: ['profile', 'subscribers', limit] as const,
-      queryFn: () => profileApi.getSubscribersShortList(limit),
+      queryFn: () => profileApi.getSubscribers(limit),
     }),
 }

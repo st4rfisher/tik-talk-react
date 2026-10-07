@@ -12,7 +12,7 @@ import styles from './Sidebar.module.scss'
 export function Sidebar() {
   const { data: profile, isPending } = useProfile('me')
   const { data: subscribers, isPending: isSubscribersPending } = useQuery(
-    profileQueries.getSubscribers(),
+    profileQueries.getSubscribersList(),
   )
 
   return (

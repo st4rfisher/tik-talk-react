@@ -6,7 +6,7 @@ import type { Profile } from '../model/types'
 export type ProfileFilters = Record<string, string | number | undefined>
 
 export const profileApi = {
-  async getSubscribersShortList(limit = 3): Promise<Profile[]> {
+  async getSubscribers(limit = 3): Promise<Profile[]> {
     const { data } = await api.get<Pageable<Profile>>('/account/subscribers/')
 
     return data.items.slice(0, limit)
@@ -32,7 +32,7 @@ export const profileApi = {
 
   async patchProfileData(payload: Partial<Profile>): Promise<Profile> {
     const { data } = await api.patch<Profile>('/account/me', payload)
-
+    
     return data
   },
 
@@ -41,7 +41,7 @@ export const profileApi = {
     formData.append('image', file)
 
     const { data } = await api.post<Profile>('/account/upload_image', formData)
-
+    
     return data
   },
 
