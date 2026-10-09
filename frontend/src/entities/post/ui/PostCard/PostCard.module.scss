@@ -1,0 +1,35 @@
+.post {
+  background-color: var(--dark-color);
+  border: var(--light-border);
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  grid-gap: 16px;
+}
+
+.post-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.post-body {
+  display: grid;
+  grid-gap: 12px;
+}
+
+.post-comments {
+  display: grid;
+  grid-gap: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 8px 16px;
+}
+
+.comment-amount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--primary-color);
+}
