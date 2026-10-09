@@ -1,19 +1,16 @@
 import clsx from 'clsx'
-import { useQuery } from '@tanstack/react-query'
 import { Link, NavLink } from 'react-router'
 
 import { Avatar, Icon, Skeleton, SkeletonList } from '@uiKit'
 
-import { SubscriberCard, profileQueries, useProfile } from '@/entities/profile'
+import { SubscriberCard, useProfile, useSubscribers } from '@/entities/profile'
 
 import { menuItems } from '../model/menu'
 import styles from './Sidebar.module.scss'
 
 export function Sidebar() {
   const { data: profile, isPending } = useProfile('me')
-  const { data: subscribers, isPending: isSubscribersPending } = useQuery(
-    profileQueries.getSubscribersList(),
-  )
+  const { data: subscribers, isPending: isSubscribersPending } = useSubscribers()
 
   return (
     <aside className={styles['sidebar']}>

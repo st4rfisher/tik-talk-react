@@ -1,16 +1,16 @@
 import clsx from 'clsx'
 import { Link, useParams } from 'react-router'
 
-import { Icon } from '@uiKit'
+import { Avatar, Icon, Skeleton, SkeletonList } from '@uiKit'
 
-import { ProfileHeader, useProfile } from '@/entities/profile'
+import { ProfileHeader, useProfile, useSubscribers } from '@/entities/profile'
 
 import styles from './ProfilePage.module.scss'
 
 export function ProfilePage() {
   const { id } = useParams()
   const { data: profile, isMyProfile } = useProfile(id)
-
+  const { data: subscribers, isPending: isSubscribersPending } = useSubscribers(6)
   return (
     <>
       <header className={styles['header']}>
@@ -38,7 +38,24 @@ export function ProfilePage() {
                 <span className={styles['subscribers-count']}>{profile.subscribersAmount}</span>
               ) : null}
             </h3>
-            {/* TODO: подписчики из entities/profile — аватары со ссылкой на /profile/:id */}
+            <div className={styles['subscribers-container']}>
+              {
+                isSubscribersPending ? (
+                    <SkeletonList
+                      skeletonCount={profile?.subscribersAmount}
+                      className={styles['subscriber-skeleton']}
+                    >
+                      <Skeleton variant="circle" width="32px" height="32px" />
+                    </SkeletonList>
+                ) : (
+                  subscribers?.map((subscriber) => (
+                    <Link key={subscriber.id} to={`/profile/${subscriber.id}`}>
+                      <Avatar url={subscriber.avatarUrl} size={32} />
+                    </Link>
+                  ))
+                )
+              }
+            </div>
             <Link className={styles['subscribers-button']} to="/search">
               <Icon iconName="plus" width="16" height="16" />
             </Link>
