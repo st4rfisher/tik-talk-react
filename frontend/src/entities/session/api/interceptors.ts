@@ -15,7 +15,6 @@ function isRequest(url: string | undefined, target: string): boolean {
 
 function addToken(config: InternalAxiosRequestConfig, token: string): InternalAxiosRequestConfig {
   config.headers.Authorization = `Bearer ${token}`
-  console.log(config)
   return config
 }
 

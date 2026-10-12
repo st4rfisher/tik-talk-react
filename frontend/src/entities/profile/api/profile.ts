@@ -20,12 +20,13 @@ export const profileApi = {
 
   async getAccount(id: string): Promise<Profile> {
     const { data } = await api.get<Profile>(`/account/${id}`)
-
+    console.log(`Account ${id}`, data)
     return data
   },
 
   async getMyAccount(): Promise<Profile> {
     const { data } = await api.get<Profile>('/account/me')
+    console.log(`My Account`, data)
 
     return data
   },
