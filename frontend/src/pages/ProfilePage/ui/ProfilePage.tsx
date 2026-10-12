@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router'
 import { Avatar, Icon, Skeleton, SkeletonList } from '@uiKit'
 
 import { ProfileHeader, useProfile, useSubscribers } from '@/entities/profile'
+import { PostFeed } from '@/widgets/PostFeed'
 
 import styles from './ProfilePage.module.scss'
 
@@ -20,8 +21,7 @@ export function ProfilePage() {
       <div className={styles['main']}>
         <div className={styles['left-side']}>
           {isMyProfile ? (
-            // TODO: лента постов — widgets/PostFeed
-            null
+            <PostFeed />
           ) : (
             <div className={styles['empty-block']}>
               <h3 className={clsx('h4', styles['h4'])}>Здесь пока нет постов от пользователя</h3>
