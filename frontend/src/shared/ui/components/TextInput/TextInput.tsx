@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { ComponentProps, FormEvent } from 'react'
+import type { ComponentProps, InputEvent } from 'react'
 
 import { Avatar } from '../Avatar'
 import { Icon } from '../Icon'
@@ -22,7 +22,7 @@ export function TextInput({
   ...props
 }: TextInputProps) {
 
-  function handleInput(event: FormEvent<HTMLTextAreaElement>) {
+  function handleInput(event: InputEvent<HTMLTextAreaElement>) {
     const textArea = event.currentTarget
     textArea.style.height = 'auto'
     textArea.style.height = `${textArea.scrollHeight}px`
