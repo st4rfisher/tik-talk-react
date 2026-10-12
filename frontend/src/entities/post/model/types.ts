@@ -13,7 +13,7 @@ export type PostCreateDTObject = {
   authorId: number
 }
 
-export type Post = {
+export type PostData = {
   id: number
   title: string
   content: string
@@ -21,7 +21,7 @@ export type Post = {
   images: string[]
   createdAt: string
   updatedAt: string
-  comments: PostComment[]
+  comments: CommentData[]
 }
 
 export type CommentCreateDTObject = {
@@ -31,7 +31,7 @@ export type CommentCreateDTObject = {
   // commentId: number //to do
 }
 
-export type PostComment = {
+export type CommentData = {
   id: number
   text: string
   author: PostAuthor

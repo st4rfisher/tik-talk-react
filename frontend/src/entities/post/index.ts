@@ -1,10 +1,12 @@
 export { postApi } from './api/post'
-export { CommentCard } from './ui/CommentCard/CommentCard'
-export { PostCard } from './ui/PostCard/PostCard'
+export { postQueries } from './model/postQueries'
+export { usePosts } from './model/usePosts'
+export { Comment } from './ui/Comment/Comment'
+export { Post } from './ui/Post/Post'
 export type {
   CommentCreateDTObject,
-  Post,
+  PostData,
   PostAuthor,
-  PostComment,
+  CommentData,
   PostCreateDTObject,
 } from './model/types'

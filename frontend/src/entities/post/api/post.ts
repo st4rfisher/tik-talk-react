@@ -1,28 +1,33 @@
 import { api } from '@/shared/api'
 
-import type { CommentCreateDTObject, Post, PostComment, PostCreateDTObject } from '../model/types'
+import type {
+  CommentCreateDTObject,
+  CommentData,
+  PostCreateDTObject,
+  PostData,
+} from '../model/types'
 
 export const postApi = {
-  async createPost(payload: PostCreateDTObject): Promise<Post> {
-    const { data } = await api.post<Post>('/post/', payload)
+  async createPost(payload: PostCreateDTObject): Promise<PostData> {
+    const { data } = await api.post<PostData>('/post/', payload)
 
     return data
   },
 
-  async createComment(payload: CommentCreateDTObject): Promise<PostComment> {
-    const { data } = await api.post<PostComment>('/comment/', payload)
+  async createComment(payload: CommentCreateDTObject): Promise<CommentData> {
+    const { data } = await api.post<CommentData>('/comment/', payload)
 
     return data
   },
 
-  async getPosts(): Promise<Post[]> {
-    const { data } = await api.get<Post[]>('/post/')
+  async getPosts(): Promise<PostData[]> {
+    const { data } = await api.get<PostData[]>('/post/')
 
     return data
   },
 
-  async getCommentsByPostId(postId: number): Promise<PostComment[]> {
-    const { data } = await api.get<Post>(`/post/${postId}`)
+  async getCommentsByPostId(postId: number): Promise<CommentData[]> {
+    const { data } = await api.get<PostData>(`/post/${postId}`)
 
     return data.comments
   },

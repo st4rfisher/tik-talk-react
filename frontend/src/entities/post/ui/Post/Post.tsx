@@ -3,18 +3,18 @@ import type { ReactNode } from 'react'
 import { Avatar, Icon } from '@uiKit'
 
 import { formatDateTime } from '@/shared/utils'
-import type { Post } from '../../model/types'
-import { CommentCard } from '../CommentCard/CommentCard'
-import styles from './PostCard.module.scss'
+import type { PostData } from '../../model/types'
+import { Comment } from '../Comment/Comment'
+import styles from './Post.module.scss'
 
-type PostCardProps = {
-  post: Post
+type PostProps = {
+  postData: PostData
   // Форма комментария приходит из features: сущность не знает, как создавать комментарий
   commentForm?: ReactNode
 }
 
-export function PostCard({ post, commentForm }: PostCardProps) {
-  const { author, comments } = post
+export function Post({ postData, commentForm }: PostProps) {
+  const { author, comments } = postData
 
   return (
     <article className={styles['post']}>
@@ -25,10 +25,10 @@ export function PostCard({ post, commentForm }: PostCardProps) {
           <span className="sub-title">
             {author.firstName} {author.lastName}
           </span>
-          <span className="label">{formatDateTime(post.createdAt)}</span>
+          <span className="label">{formatDateTime(postData.createdAt)}</span>
         </div>
 
-        <p className="medium-text">{post.content}</p>
+        <p className="medium-text">{postData.content}</p>
 
         <div className={styles['post-footer']}>
           <p className={styles['comment-amount']}>
@@ -40,7 +40,7 @@ export function PostCard({ post, commentForm }: PostCardProps) {
         {comments.length > 0 && (
           <div className={styles['post-comments']}>
             {comments.map((comment) => (
-              <CommentCard key={comment.id} comment={comment} />
+              <Comment key={comment.id} commentData={comment} />
             ))}
           </div>
         )}
