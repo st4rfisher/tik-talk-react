@@ -1,4 +1,5 @@
 export { getCookie, removeCookie, setCookie } from './cookie'
 export { formatDateTime } from './date'
 export { imageUrl } from './image'
+export { fitTextareaToContent } from './textarea'
 export { replacePrefix } from './url'

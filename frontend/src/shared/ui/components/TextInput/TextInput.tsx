@@ -1,12 +1,13 @@
 import clsx from 'clsx'
 import type { ComponentProps, InputEvent } from 'react'
 
+import { fitTextareaToContent } from '@/shared/utils'
+
 import { Avatar } from '../Avatar'
 import { Icon } from '../Icon'
 import styles from './TextInput.module.scss'
 
 type TextInputProps = ComponentProps<'textarea'> & {
-  // undefined — без аватара, null — аватар по умолчанию
   avatarUrl?: string | null
   variant?: 'default' | 'dashed'
   onSend: () => void
@@ -23,9 +24,7 @@ export function TextInput({
 }: TextInputProps) {
 
   function handleInput(event: InputEvent<HTMLTextAreaElement>) {
-    const textArea = event.currentTarget
-    textArea.style.height = 'auto'
-    textArea.style.height = `${textArea.scrollHeight}px`
+    fitTextareaToContent(event.currentTarget)
     onInput?.(event)
   }
 
