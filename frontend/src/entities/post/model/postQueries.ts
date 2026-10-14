@@ -8,4 +8,10 @@ export const postQueries = {
       queryKey: ['posts'] as const,
       queryFn: () => postApi.getPosts(),
     }),
+
+  getComments: (postId: number) =>
+    queryOptions({
+      queryKey: ['comments', postId] as const,
+      queryFn: () => postApi.getCommentsByPostId(postId),
+    }),
 }
