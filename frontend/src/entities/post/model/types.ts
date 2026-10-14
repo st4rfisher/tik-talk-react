@@ -8,7 +8,7 @@ export type PostAuthor = {
 }
 
 export type PostCreateDTObject = {
-  title: string
+  title?: string
   content: string
   authorId: number
 }

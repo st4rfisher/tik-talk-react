@@ -22,7 +22,8 @@ export const postApi = {
 
   async getPosts(): Promise<PostData[]> {
     const { data } = await api.get<PostData[]>('/post/')
-
+    console.log(data)
+    
     return data
   },
 
