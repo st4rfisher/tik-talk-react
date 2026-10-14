@@ -5,3 +5,14 @@
   height: 100%;
   overflow-y: auto;
 }
+
+.empty-block {
+  display: grid;
+  gap: 24px;
+  max-width: 400px;
+}
+
+.h4 {
+  text-align: center;
+  user-select: none;
+}

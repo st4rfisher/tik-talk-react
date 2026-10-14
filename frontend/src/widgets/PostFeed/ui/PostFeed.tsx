@@ -1,12 +1,25 @@
-import { Skeleton, SkeletonList } from '@uiKit'
+import clsx from 'clsx'
+
+import { Icon, Skeleton, SkeletonList } from '@uiKit'
 
 import { Post, usePosts } from '@/entities/post'
-import { CommentForm } from '@/features/comment'
+import { useProfile } from '@/entities/profile'
+import { CreateCommentForm } from '@/features/createComment'
+import { CreatePostForm } from '@/features/createPost'
 
 import styles from './PostFeed.module.scss'
 
-export function PostFeed() {
-  const { data: posts, isPending } = usePosts()
+type PostFeedProps = {
+  profileId: string
+}
+
+export function PostFeed({ profileId }: PostFeedProps) {
+  const { isMyProfile } = useProfile(profileId)
+  const { data: posts, isError, isPending } = usePosts()
+
+  if (isError) {
+    return <p className="regular-text">Не удалось загрузить посты</p>
+  }
 
   if (isPending) {
     return (
@@ -18,10 +31,25 @@ export function PostFeed() {
     )
   }
 
+  if (posts.length === 0) {
+    return (
+      <div className={styles['empty-block']}>
+        <h3 className={clsx('h4', styles['h4'])}>Здесь пока нет постов</h3>
+        <Icon iconName="post" width="120" height="120" />
+      </div>
+    )
+  }
+
   return (
     <div className={styles['post-feed']}>
+      {isMyProfile && <CreatePostForm/>}
+      
       {posts?.map((post) => (
-        <Post key={post.id} postData={post} commentForm={<CommentForm postId={post.id} />} />
+        <Post 
+          key={post.id} 
+          postData={post} 
+          commentForm={<CreateCommentForm postId={post.id} />}
+        />
       ))}
     </div>
   )

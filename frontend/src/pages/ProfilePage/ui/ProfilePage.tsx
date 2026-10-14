@@ -10,24 +10,17 @@ import styles from './ProfilePage.module.scss'
 
 export function ProfilePage() {
   const { id } = useParams()
-  const { data: profile, isMyProfile } = useProfile(id)
+  const { data: profile } = useProfile(id)
   const { data: subscribers, isPending: isSubscribersPending } = useSubscribers(6)
   return (
     <>
       <header className={styles['header']}>
-        <ProfileHeader id={id} />
+        <ProfileHeader id={id ?? 'me'} />
       </header>
 
       <div className={styles['main']}>
         <div className={styles['left-side']}>
-          {isMyProfile ? (
-            <PostFeed />
-          ) : (
-            <div className={styles['empty-block']}>
-              <h3 className={clsx('h4', styles['h4'])}>Здесь пока нет постов от пользователя</h3>
-              <Icon iconName="post" width="120" height="120" />
-            </div>
-          )}
+          <PostFeed profileId={id ?? 'me'} />
         </div>
 
         <div>
