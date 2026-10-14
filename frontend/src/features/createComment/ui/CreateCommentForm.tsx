@@ -4,11 +4,11 @@ import { TextInput } from '@uiKit'
 
 import { useCreateComment } from '../model/useCreateComment'
 
-type CommentFormProps = {
+type CreateCommentFormProps = {
   postId: number
 }
 
-export function CommentForm({ postId }: CommentFormProps) {
+export function CreateCommentForm({ postId }: CreateCommentFormProps) {
   const { text, setText, submit, avatarUrl, isPending } = useCreateComment(postId)
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
