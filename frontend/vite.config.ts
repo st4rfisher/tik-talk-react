@@ -2,8 +2,13 @@ import { fileURLToPath, URL } from 'node:url'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
+import { svgSprite } from './vite-plugins/svgSprite.ts'
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    svgSprite(fileURLToPath(new URL('./src/shared/ui/components/Icon/assets', import.meta.url))),
+  ],
   resolve: {
     alias: {
       '@uiKit': fileURLToPath(new URL('./src/shared/ui/components', import.meta.url)),
