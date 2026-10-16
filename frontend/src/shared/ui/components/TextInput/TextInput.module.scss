@@ -18,7 +18,8 @@
   background-color: var(--dark-color);
   border: none;
   color: var(--light-color);
-
+  overflow: hidden;
+  
   &:hover,
   &:focus-visible {
     outline: 1px solid var(--primary-color);
