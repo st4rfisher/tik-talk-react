@@ -28,7 +28,7 @@ export function Post({ postData, commentForm }: PostProps) {
           <span className="label">{formatDateTime(postData.createdAt)}</span>
         </div>
 
-        <p className="medium-text">{postData.content}</p>
+        <p className={`${styles['medium-text']} medium-text`}>{postData.content}</p>
 
         <div className={styles['post-footer']}>
           <p className={styles['comment-amount']}>

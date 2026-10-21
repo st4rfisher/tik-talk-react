@@ -18,7 +18,7 @@ export function Comment({ commentData }: CommentProps) {
           <span className="medium-text">{commentData.author.username}</span>
           <span className="medium-text">{formatDateTime(commentData.createdAt)}</span>
         </header>
-        <div className={styles['comment-text']}>{commentData.text}</div>
+        <div className={`${styles['medium-text']} medium-text`}>{commentData.text}</div>
       </div>
     </div>
   )
