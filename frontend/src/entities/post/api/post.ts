@@ -20,10 +20,15 @@ export const postApi = {
     return data
   },
 
-  async getPosts(): Promise<PostData[]> {
+  async getMyPosts(): Promise<PostData[]> {
     const { data } = await api.get<PostData[]>('/post/')
-    console.log(data)
-    
+
+    return data
+  },
+
+  async getPostsByUserId(userId: number): Promise<PostData[]> {
+    const { data } = await api.get<PostData[]>('/post/', { params: { user_id: userId } })
+
     return data
   },
 

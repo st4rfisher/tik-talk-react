@@ -3,10 +3,16 @@ import { queryOptions } from '@tanstack/react-query'
 import { postApi } from '../api/post'
 
 export const postQueries = {
-  getPosts: () =>
+  allPosts: () => ['posts'] as const,
+
+  getPostsByProfileId: (profileId: string) =>
     queryOptions({
-      queryKey: ['posts'] as const,
-      queryFn: () => postApi.getPosts(),
+      queryKey: [...postQueries.allPosts(), profileId] as const,
+      queryFn: () => (
+        profileId === 'me'
+          ? postApi.getMyPosts()
+          : postApi.getPostsByUserId(Number(profileId))
+      ),
     }),
 
   getComments: (postId: number) =>

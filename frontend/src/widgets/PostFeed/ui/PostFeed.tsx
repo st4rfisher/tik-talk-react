@@ -15,7 +15,7 @@ type PostFeedProps = {
 
 export function PostFeed({ profileId }: PostFeedProps) {
   const { isMyProfile } = useProfile(profileId)
-  const { data: posts, isError, isPending } = usePosts()
+  const { data: posts, isError, isPending } = usePosts(profileId)
 
   if (isError) {
     return <p className="regular-text">Не удалось загрузить посты</p>
