@@ -5,7 +5,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { ProfilePage } from '@/pages/ProfilePage'
 import { SearchPage } from '@/pages/SearchPage'
 import { SettingsPage } from '@/pages/SettingsPage'
-import { ChatPage, ChatsPage, NewChatPage } from '@/pages/Сhats'
+import { ChatPage, ChatsPage, NewChatPage } from '@/pages/chats'
 
 import { requireAuth } from './guards'
 
