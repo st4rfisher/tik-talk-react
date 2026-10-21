@@ -44,13 +44,15 @@ export function PostFeed({ profileId }: PostFeedProps) {
     <div className={styles['post-feed']}>
       {isMyProfile && <CreatePostForm/>}
       
-      {posts?.map((post) => (
-        <Post 
-          key={post.id} 
-          postData={post} 
-          commentForm={<CreateCommentForm postId={post.id} />}
-        />
-      ))}
+      <div className={styles['post-feed__wrapper']}> 
+        {posts?.map((post) => (
+          <Post 
+            key={post.id} 
+            postData={post} 
+            commentForm={<CreateCommentForm postId={post.id} />}
+          />
+        ))}
+      </div>  
     </div>
   )
 }

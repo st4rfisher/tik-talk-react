@@ -12,6 +12,7 @@
   grid-template-columns: 1fr 350px;
   padding: 24px;
   height: calc(100vh - 160px);
+  overflow-y: hidden;
 }
 
 .h6 {
@@ -53,11 +54,13 @@
   background-color: var(--green-color);
   padding: 4px 6px;
 }
-
+w
 .left-side {
   display: grid;
   align-content: flex-start;
   gap: 16px;
+  padding-bottom: 48px;
+  height: calc(100vh - 160px);
 }
 
 .skeleton-container {
