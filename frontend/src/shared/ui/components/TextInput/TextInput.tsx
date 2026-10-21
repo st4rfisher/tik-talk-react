@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { ComponentProps, InputEvent } from 'react'
+import { useRef, useState, type ComponentProps, type InputEvent } from 'react'
 
 import { fitTextareaToContent } from '@/shared/utils'
 
@@ -22,6 +22,13 @@ export function TextInput({
   disabled,
   ...props
 }: TextInputProps) {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const [isFocused, setIsFocused] = useState(false)
+
+  function focusTextArea(event: React.MouseEvent<HTMLDivElement>) {
+    if ((event.target as HTMLElement).closest('button') && textAreaRef.current?.value.trim() === '') return
+    textAreaRef.current?.focus()
+  }
 
   function handleInput(event: InputEvent<HTMLTextAreaElement>) {
     fitTextareaToContent(event.currentTarget)
@@ -33,16 +40,21 @@ export function TextInput({
       className={clsx(
         styles['text-input'],
         variant === 'dashed' && styles['text-input--dashed'],
+        isFocused && styles['text-input--focused'],
         className,
       )}
+      onClick={focusTextArea}
     >
       <Avatar url={avatarUrl} size={32} />
       <textarea
         {...props}
+        ref={textAreaRef}
         className={styles['textarea']}
         rows={1}
         disabled={disabled}
         onInput={handleInput}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
       />
       <button
         type="button"
