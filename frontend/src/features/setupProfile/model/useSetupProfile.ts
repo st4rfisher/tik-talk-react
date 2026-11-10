@@ -32,6 +32,7 @@ export function useSetupProfile(onSuccessFn: () => void) {
 
   return {
     register: form.register,
+    control: form.control,
     submit,
     errors: form.formState.errors,
     isSubmitting: form.formState.isSubmitting,

@@ -1,0 +1,48 @@
+.stack-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border-bottom: var(--light-border);
+  background-color: var(--dark-color);
+  padding: 12px 0;
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+.stack-tag {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  user-select: none;
+
+  button {
+    padding: 0;
+    line-height: 0;
+  }
+}
+
+.stack-ghost-input {
+  flex-grow: 1;
+  min-width: 20px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--light-color);
+}
+
+.error {
+  margin-top: 4px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--danger-color);
+}

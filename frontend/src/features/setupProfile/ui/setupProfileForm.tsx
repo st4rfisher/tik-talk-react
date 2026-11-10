@@ -1,6 +1,7 @@
 import clsx from 'clsx'
+import { Controller } from 'react-hook-form'
 
-import { Icon, Input } from '@uiKit'
+import { ChipsInput, Icon, Input } from '@uiKit'
 
 import styles from './setupProfileForm.module.scss'
 import { useSetupProfile } from '../model/useSetupProfile'
@@ -10,7 +11,7 @@ type SetupProfileFormProps = {
 }
 
 export function SetupProfileForm({ onSuccessFn }: SetupProfileFormProps) {
-  const { register, submit, errors, isSubmitting, isDirty } = useSetupProfile(onSuccessFn)
+  const { register, control, submit, errors, isSubmitting, isDirty } = useSetupProfile(onSuccessFn)
   const isDisabledSubmit = isSubmitting || !isDirty
 
   return (
@@ -57,13 +58,28 @@ export function SetupProfileForm({ onSuccessFn }: SetupProfileFormProps) {
           Аватар
         </Input>
 
-        <Input 
-          type="text"
-          {...register('stack')}
-          error={errors.stack?.message}
-        >
-          Навыки (стэк)
-        </Input>
+        <Controller
+          name="stack"
+          control={control}
+          render={({ field, fieldState }) => (
+            <label className={
+              clsx('label', styles['label'])} 
+              htmlFor={field.name}
+            >
+              Навыки (стэк)
+              <ChipsInput
+                id={field.name}
+                name={field.name}
+                ref={field.ref}
+                value={field.value}
+                disabled={field.disabled}
+                error={fieldState.error?.message}
+                onBlur={field.onBlur}
+                onChange={field.onChange}
+              />
+            </label>
+          )}
+        />
 
         <Input
           type="text"
