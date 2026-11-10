@@ -1,0 +1,43 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+  border: var(--light-border);
+  background: var(--dark-color);
+}
+
+.form-top {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-bottom,
+.form-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.form-bottom {
+  justify-content: space-between;
+}
+
+.form-buttons {
+  column-gap: 20px;
+}
+
+.split-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+}
+
+.label {
+  font-weight: 400;
+  row-gap: 4px;
+}
+
+.input {
+  padding: 12px 0;
+}
