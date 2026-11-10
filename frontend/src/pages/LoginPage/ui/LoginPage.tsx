@@ -7,7 +7,7 @@ export function LoginPage() {
 
   return (
     <div className={styles['login-page']}>
-      <LoginForm onSuccess={() => navigate('/')} />
+      <LoginForm onSuccessFn={() => navigate('/')} />
       <img src="/assets/images/logo.svg" alt="Логотип Tik-Talk" />
     </div>
   )

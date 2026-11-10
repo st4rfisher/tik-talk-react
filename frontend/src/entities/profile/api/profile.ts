@@ -20,20 +20,20 @@ export const profileApi = {
 
   async getAccount(id: string): Promise<Profile> {
     const { data } = await api.get<Profile>(`/account/${id}`)
-    console.log(`Account ${id}`, data)
+    console.log(`Profile ${id}`, data)
     return data
   },
 
   async getMyAccount(): Promise<Profile> {
     const { data } = await api.get<Profile>('/account/me')
-    console.log(`My Account`, data)
+    console.log(`My Profile`, data)
 
     return data
   },
 
   async patchProfileData(payload: Partial<Profile>): Promise<Profile> {
     const { data } = await api.patch<Profile>('/account/me', payload)
-    
+    console.log(`Patch Profile Data`, data)
     return data
   },
 

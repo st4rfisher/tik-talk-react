@@ -7,7 +7,7 @@ import { useProfile } from '../../model/useProfile'
 import styles from './ProfileHeader.module.scss'
 
 type ProfileHeaderProps = {
-  id: string | undefined
+  id: string 
 }
 
 export function ProfileHeader({ id }: ProfileHeaderProps) {

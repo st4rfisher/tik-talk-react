@@ -6,11 +6,11 @@ import { useLogin } from '../model/useLogin'
 import styles from './LoginForm.module.scss'
 
 type LoginFormProps = {
-  onSuccess: () => void
+  onSuccessFn: () => void
 }
 
-export function LoginForm({ onSuccess }: LoginFormProps) {
-  const { register, submit, errors, isSubmitting } = useLogin(onSuccess)
+export function LoginForm({ onSuccessFn }: LoginFormProps) {
+  const { register, submit, errors, isSubmitting } = useLogin(onSuccessFn)
 
   return (
     <form className={styles['login-form']} onSubmit={submit} noValidate>

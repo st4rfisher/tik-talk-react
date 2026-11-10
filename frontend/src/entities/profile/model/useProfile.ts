@@ -7,9 +7,9 @@ export function checkIsMyProfile(id: string | undefined, profile: Profile | unde
   return id === 'me' || (profile != null && id === String(profile.id))
 }
 
-export function useProfile(id: string | undefined) {
+export function useProfile(id: string ) {
   const profileQuery = useQuery({
-    ...profileQueries.getProfileById(id ?? ''),
+    ...profileQueries.getProfileById(id),
     enabled: Boolean(id),
   })
 
@@ -19,6 +19,6 @@ export function useProfile(id: string | undefined) {
 
   return {
     ...profileQuery,
-    isMyProfile: checkIsMyProfile(id, myProfileQuery.data),
+    isMyProfile: checkIsMyProfile(id, profileQuery.data),
   }
 }

@@ -5,7 +5,7 @@ import { authApi } from '@/entities/session'
 
 import { loginSchema, type LoginFormValues } from './schema'
 
-export function useLogin(onSuccess: () => void) {
+export function useLogin(onSuccessFn: () => void) {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -17,7 +17,7 @@ export function useLogin(onSuccess: () => void) {
   const submit = form.handleSubmit(async (values) => {
     try {
       await authApi.login(values)
-      onSuccess()
+      onSuccessFn()
     } catch (error) {
       console.error('Не удалось войти', error)
       form.setError('password', { message: 'Неверный логин или пароль' })
