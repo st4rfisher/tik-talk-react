@@ -15,20 +15,20 @@ export function useSetupProfile(onSuccessFn: () => void, onSave?: () => Promise<
     resetOptions: { keepDirtyValues: true },
   })
 
-  const submit = form.handleSubmit(async (values) => {
+  const submit = form.handleSubmit(async (formValues) => {
     try {
       await onSave?.()
-      const updatedProfile = await profileApi.patchProfileData(values)
+      const updatedProfileData = await profileApi.patchProfileData(formValues)
       const queryKey = profileQueries.getProfileById('me').queryKey
-      const currentProfile = queryClient.getQueryData<Profile>(queryKey)
-      const newProfileData: Profile = currentProfile
+      const currentProfileData = queryClient.getQueryData<Profile>(queryKey)
+      const newProfileData: Profile = currentProfileData
         ? { 
-            ...currentProfile, 
-            ...values, 
-            ...updatedProfile, 
-            avatarUrl: currentProfile.avatarUrl 
+            ...currentProfileData, 
+            ...formValues, 
+            ...updatedProfileData, 
+            avatarUrl: currentProfileData.avatarUrl 
           }
-        : updatedProfile
+        : updatedProfileData
       queryClient.setQueryData(queryKey, newProfileData)
       form.reset(setupProfileFormValues(newProfileData))
       onSuccessFn()

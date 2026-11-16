@@ -1,7 +1,6 @@
 import type { Profile } from '@/entities/profile'
 import { z } from 'zod'
 
-
 //схема для формы setupProfileForm
 export const setupProfileSchema = z.object({
   firstName: z.string().min(1, 'Введите имя'),
@@ -14,7 +13,7 @@ export const setupProfileSchema = z.object({
 
 export type setupProfileFormValues = z.infer<typeof setupProfileSchema>
 
-//функция для установки значений по умолчанию
+//Установка значений по умолчанию
 export function setupProfileDefaultValues(): setupProfileFormValues {
   return {
     firstName: '',
@@ -26,8 +25,8 @@ export function setupProfileDefaultValues(): setupProfileFormValues {
   }
 }
 
-//функция для преобразования данных профиля в значения формы
-export function setupProfileFormValues(Profiledata: Profile): z.infer<typeof setupProfileSchema> {
+//Преобразование данных профиля в значения формы
+export function setupProfileFormValues(Profiledata: Profile): setupProfileFormValues {
   return {
     firstName: Profiledata.firstName,
     lastName: Profiledata.lastName,
