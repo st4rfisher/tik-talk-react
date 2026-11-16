@@ -1,5 +1,19 @@
 .settings-page {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: flex-start;
   gap: 48px;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  &__block {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
 }
+

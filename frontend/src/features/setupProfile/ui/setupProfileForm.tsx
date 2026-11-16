@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { type ReactNode } from 'react'
 import { Controller } from 'react-hook-form'
 
 import { ChipsInput, Icon, Input } from '@uiKit'
@@ -8,11 +9,19 @@ import { useSetupProfile } from '../model/useSetupProfile'
 
 type SetupProfileFormProps = {
   onSuccessFn: () => void
+  onSave?: () => Promise<void>
+  hasPendingChanges?: boolean
+  avatarComponent: ReactNode
 }
 
-export function SetupProfileForm({ onSuccessFn }: SetupProfileFormProps) {
-  const { register, control, submit, errors, isSubmitting, isDirty } = useSetupProfile(onSuccessFn)
-  const isDisabledSubmit = isSubmitting || !isDirty
+export function SetupProfileForm({
+  onSuccessFn,
+  onSave,
+  hasPendingChanges = false,
+  avatarComponent,
+}: SetupProfileFormProps) {
+  const { register, control, submit, errors, isSubmitting, isDirty } = useSetupProfile(onSuccessFn, onSave)
+  const isDisabledSubmit = isSubmitting || (!isDirty && !hasPendingChanges)
 
   return (
     <form className={styles.form} onSubmit={submit}>
@@ -54,9 +63,10 @@ export function SetupProfileForm({ onSuccessFn }: SetupProfileFormProps) {
           />
         </label>
 
-        <Input type="file" accept="image/*">
+        <div className={clsx('label', styles['label'])}>
           Аватар
-        </Input>
+          {avatarComponent}
+        </div>
 
         <Controller
           name="stack"

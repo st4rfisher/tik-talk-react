@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { profileApi, useProfile } from '@/entities/profile'
 
-import { setupProfileSchema, type setupProfileFormValues } from './schema'
+import { profileApi, profileQueries, useProfile, type Profile } from '@/entities/profile'
+import { queryClient } from '@/shared/query'
 
-export function useSetupProfile(onSuccessFn: () => void) {
+import { setupProfileDefaultValues, setupProfileFormValues, setupProfileSchema } from './schema'
+
+export function useSetupProfile(onSuccessFn: () => void, onSave?: () => Promise<void>) {
   const { data: profile } = useProfile('me')
   const form = useForm<setupProfileFormValues>({
     resolver: zodResolver(setupProfileSchema),
@@ -15,7 +17,20 @@ export function useSetupProfile(onSuccessFn: () => void) {
 
   const submit = form.handleSubmit(async (values) => {
     try {
-      await profileApi.patchProfileData(values)
+      await onSave?.()
+      const updatedProfile = await profileApi.patchProfileData(values)
+      const queryKey = profileQueries.getProfileById('me').queryKey
+      const currentProfile = queryClient.getQueryData<Profile>(queryKey)
+      const newProfileData: Profile = currentProfile
+        ? { 
+            ...currentProfile, 
+            ...values, 
+            ...updatedProfile, 
+            avatarUrl: currentProfile.avatarUrl 
+          }
+        : updatedProfile
+      queryClient.setQueryData(queryKey, newProfileData)
+      form.reset(setupProfileFormValues(newProfileData))
       onSuccessFn()
     } catch (error) {
       console.error('Не удалось сохранить данные', error)
