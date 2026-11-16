@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useRef, useState, type ChangeEvent, type DragEvent, type KeyboardEvent } from 'react'
 
-import { Icon } from '@uiKit'
+import { Avatar, Icon } from '@uiKit'
 
 import styles from './AvatarUpload.module.scss'
 
@@ -51,7 +51,7 @@ export function AvatarUpload({ previewUrl, onProcessFile }: AvatarUploadProps) {
 
   return (
     <div className={styles['avatar-upload']}>
-      <img className={styles['avatar']} src={previewUrl} width={120} height={120} alt="Аватар" />
+      <Avatar url={previewUrl} size={120} alt="Аватар"/>
       <div
         className={clsx(styles['dropzone'], isDragOver && styles['fileover'])}
         tabIndex={0}
