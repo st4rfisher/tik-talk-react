@@ -8,14 +8,7 @@ export function useSetupProfile(onSuccessFn: () => void) {
   const { data: profile } = useProfile('me')
   const form = useForm<setupProfileFormValues>({
     resolver: zodResolver(setupProfileSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      username: '',
-      description: '',
-      stack: [],
-      city: '',
-    },
+    defaultValues: setupProfileDefaultValues(),
     values: profile,
     resetOptions: { keepDirtyValues: true },
   })
