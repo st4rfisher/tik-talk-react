@@ -13,10 +13,6 @@ export function useProfile(id: string ) {
     enabled: Boolean(id),
   })
 
-  const myProfileQuery = useQuery({
-    ...profileQueries.getProfileById('me'),
-  })
-
   return {
     ...profileQuery,
     isMyProfile: checkIsMyProfile(id, profileQuery.data),
