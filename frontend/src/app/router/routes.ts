@@ -5,7 +5,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { ProfilePage } from '@/pages/ProfilePage'
 import { SearchPage } from '@/pages/SearchPage'
 import { SettingsPage } from '@/pages/SettingsPage'
-import { ChatPage, ChatsPage, NewChatPage } from '@/pages/chats'
+import { ChatsPage } from '@/pages/ChatsPage'
 
 import { requireAuth } from './guards'
 
@@ -36,21 +36,8 @@ export const router = createBrowserRouter([
         Component: SearchPage,
       },
       {
-        path: 'chats',
-        children: [
-          {
-            index: true,
-            Component: ChatsPage,
-          },
-          {
-            path: 'new',
-            Component: NewChatPage,
-          },
-          {
-            path: ':id',
-            Component: ChatPage,
-          },
-        ],
+        path: 'chats/:id?',
+        Component: ChatsPage,
       },
     ],
   },

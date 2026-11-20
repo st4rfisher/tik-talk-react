@@ -1,0 +1,8 @@
+.page {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  height: calc(100vh - 48px);
+  min-height: 0;
+  background-color: var(--dark-color);
+  border: var(--light-border);
+}
