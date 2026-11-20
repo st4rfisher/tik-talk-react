@@ -1,6 +1,7 @@
 export { Avatar } from './Avatar'
 export { Icon } from './Icon'
 export { Input } from './Input'
+export { SearchInput } from './SearchInput'
 export { Skeleton, SkeletonList } from './Skeletons'
 export { ChipsInput } from './ChipsInput'
 export { TextInput } from './TextInput'
