@@ -29,7 +29,10 @@ export function useUploadAvatar() {
     const queryKey = profileQueries.getProfileById('me').queryKey
 
     queryClient.setQueryData<Profile>(queryKey, (current) =>
-      current ? { ...current, ...updated } : updated,
+      current ? { 
+        ...current, 
+        ...updated 
+      } : updated,
     )
     setFile(null)
     setLocalPreview(null)
