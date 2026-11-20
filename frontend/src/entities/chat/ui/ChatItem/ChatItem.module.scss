@@ -1,0 +1,33 @@
+.item {
+  display: flex;
+  padding: 24px 20px;
+  border-bottom: var(--light-border);
+  gap: 16px;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible,
+  &.active {
+    background-color: var(--dark-hover-color);
+  }
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 16px;
+  text-align: left;
+  color: var(--light-color);
+}
+
+.counter {
+  align-self: flex-start;
+  flex-shrink: 0;
+  color: var(--light-color);
+  background-color: tomato;
+  padding: 4px;
+  border-radius: 8px;
+  min-width: 24px;
+}
