@@ -1,0 +1,22 @@
+.chats-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: var(--light-border);
+}
+
+.chats-input {
+  padding: 16px 20px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.status {
+  padding: 16px 20px;
+}
