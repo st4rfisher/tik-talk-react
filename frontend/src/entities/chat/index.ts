@@ -8,7 +8,7 @@ export {
   toIncomingMessage,
 } from './model/message'
 export { useChats } from './model/useChats'
-export { ChatItem } from './ui/ChatItem/ChatItem'
+export { ChatListItem } from './ui/ChatListItem/ChatListItem'
 export type {
   Chat,
   ChatUser,

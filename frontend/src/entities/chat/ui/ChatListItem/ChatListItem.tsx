@@ -3,15 +3,15 @@ import clsx from 'clsx'
 import { Avatar } from '@uiKit'
 
 import type { LastMessageResponse } from '../../model/types'
-import styles from './ChatItem.module.scss'
+import styles from './ChatListItem.module.scss'
 
-type ChatItemProps = {
+type ChatListItemProps = {
   chatData: LastMessageResponse
   isActive?: boolean
   onClick?: () => void
 }
 
-export function ChatItem({ chatData, isActive = false, onClick }: ChatItemProps) {
+export function ChatListItem({ chatData, isActive = false, onClick }: ChatListItemProps) {
   const { userFrom } = chatData
 
   return (

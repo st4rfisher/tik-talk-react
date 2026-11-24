@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router'
 
 import { SearchInput } from '@uiKit'
 
-import { ChatItem, useChats } from '@/entities/chat'
+import { ChatListItem, useChats } from '@/entities/chat'
 import { setToLocalStorage } from '@/shared/utils'
 
 import styles from './ChatsList.module.scss'
@@ -27,7 +27,7 @@ export function ChatsList() {
           <p className={clsx('regular-text', styles['status'])}>Не удалось загрузить чаты</p>
         ) : (
           chats?.map((chat) => (
-            <ChatItem
+            <ChatListItem
               key={chat.id}
               chatData={chat}
               isActive={id === String(chat.id)}
