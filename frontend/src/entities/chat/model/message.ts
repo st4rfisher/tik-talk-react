@@ -14,15 +14,7 @@ export function mapChat(chat: Chat, currentUserId: number): Chat {
   }
 }
 
-export function isNewMessage(message: ChatWSMessage): message is ChatWSNewMessage {
-  return 'action' in message && message.action === 'message'
-}
-
-export function isUnreadMessage(message: ChatWSMessage): message is ChatWSUnreadMessage {
-  return 'action' in message && message.action === 'unread'
-}
-
-export function toIncomingMessage(message: ChatWSNewMessage): Message {
+export function transformToIncomingMessage(message: ChatWSNewMessage): Message {
   return {
     id: message.data.id,
     userFromId: message.data.author,
@@ -32,6 +24,14 @@ export function toIncomingMessage(message: ChatWSNewMessage): Message {
     isRead: false,
     isMine: false,
   }
+}
+
+export function isNewMessage(message: ChatWSMessage): message is ChatWSNewMessage {
+  return 'action' in message && message.action === 'message'
+}
+
+export function isUnreadMessage(message: ChatWSMessage): message is ChatWSUnreadMessage {
+  return 'action' in message && message.action === 'unread'
 }
 
 type WSMessageHandlers = {
@@ -47,6 +47,6 @@ export function handleWSMessage(message: ChatWSMessage, handlers: WSMessageHandl
   }
 
   if (isNewMessage(message)) {
-    handlers.onNewMessage?.(toIncomingMessage(message))
+    handlers.onNewMessage?.(transformToIncomingMessage(message))
   }
 }
