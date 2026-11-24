@@ -1,14 +1,15 @@
 export { chatApi } from './api/chat'
+
 export { chatQueries } from './model/chatQueries'
 export {
   handleWSMessage,
   isNewMessage,
   isUnreadMessage,
   mapChat,
-  toIncomingMessage,
+  transformToIncomingMessage,
 } from './model/message'
+export { useChat } from './model/useChat'
 export { useChats } from './model/useChats'
-export { ChatListItem } from './ui/ChatListItem/ChatListItem'
 export type {
   Chat,
   ChatUser,
@@ -16,3 +17,6 @@ export type {
   LastMessageResponse,
   Message,
 } from './model/types'
+
+export { ChatListItem } from './ui/ChatListItem/ChatListItem'
+export { ChatMessageItem } from './ui/ChatMessageItem/ChatMessageItem'
