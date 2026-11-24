@@ -1,0 +1,30 @@
+.workspace {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.messages {
+  display: grid;
+  grid-template-rows: 1fr min-content;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.messages-wrapper {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  overflow: auto;
+  padding: 16px 20px;
+}
+
+.composer {
+  padding: 0 20px 16px;
+}
+
+.status {
+  padding: 16px 20px;
+}
