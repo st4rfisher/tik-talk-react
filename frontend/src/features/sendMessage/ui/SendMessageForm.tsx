@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react'
 
-import { TextInput } from '@uiKit'
+import { TextInput } from '@shared/ui'
 
 import { useSendMessage } from '../model/useSendMessage'
 

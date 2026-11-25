@@ -33,7 +33,7 @@ alwaysApply: true
 
 `app` и `shared` — без слайсов: сегменты сразу в корне слоя
 (`app/router`, `shared/api`, `shared/ui`).
-Исключение: UI-кит как модули (`shared/ui/components/Input`).
+Исключение: UI-кит как модули внутри `shared/ui/components`, снаружи — `shared/ui` (`@shared/ui`).
 
 ## Сегмент — «какая роль у файла»
 

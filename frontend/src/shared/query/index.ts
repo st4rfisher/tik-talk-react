@@ -1,1 +1,1 @@
-export { queryClient } from './queryClient'
+export { invalidateQueries, queryClient } from './queryClient'

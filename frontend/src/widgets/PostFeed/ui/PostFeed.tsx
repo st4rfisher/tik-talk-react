@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import { Icon, Skeleton, SkeletonList } from '@uiKit'
+import { Icon, Skeleton, SkeletonList } from '@shared/ui'
 
 import { Post, usePosts } from '@/entities/post'
 import { useProfile } from '@/entities/profile'

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { Avatar, Icon } from '@uiKit'
+import { Avatar, Icon } from '@shared/ui'
 
 import { formatDateTime } from '@/shared/utils'
 import type { PostData } from '../../model/types'

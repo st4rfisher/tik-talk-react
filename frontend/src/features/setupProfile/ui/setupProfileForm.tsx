@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { type ReactNode } from 'react'
 import { Controller } from 'react-hook-form'
 
-import { ChipsInput, Icon, Input } from '@uiKit'
+import { ChipsInput, Icon, Input } from '@shared/ui'
 
 import styles from './setupProfileForm.module.scss'
 import { useSetupProfile } from '../model/useSetupProfile'

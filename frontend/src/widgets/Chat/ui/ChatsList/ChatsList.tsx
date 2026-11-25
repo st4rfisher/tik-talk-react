@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useNavigate, useParams } from 'react-router'
 
-import { SearchInput } from '@uiKit'
+import { SearchInput } from '@shared/ui'
 
 import { ChatListItem, useChats } from '@/entities/chat'
 import { setToLocalStorage } from '@/shared/utils'

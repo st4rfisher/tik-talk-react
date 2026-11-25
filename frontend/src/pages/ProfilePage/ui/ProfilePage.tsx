@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { Link, useParams } from 'react-router'
 
-import { Avatar, Icon, Skeleton, SkeletonList } from '@uiKit'
+import { Avatar, Icon, Skeleton, SkeletonList } from '@shared/ui'
 
 import { ProfileHeader, useProfile, useSubscribers } from '@/entities/profile'
 import { PostFeed } from '@/widgets/PostFeed'

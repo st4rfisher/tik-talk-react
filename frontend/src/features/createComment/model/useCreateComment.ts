@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { invalidateQueries } from '@/shared/query/queryClient'
 import { useState } from 'react'
+
+import { invalidateQueries } from '@shared/query'
 
 import { postApi, postQueries } from '@/entities/post'
 import { profileQueries } from '@/entities/profile'

@@ -38,5 +38,5 @@ import { hasAccessToken } from '@/entities/session'
 ## shared
 
 Общего `shared/index.ts` не делаем — публичный API держим на уровне модуля
-или сегмента: `@/shared/ui/components/Input`, `@/shared/utils`.
+или сегмента: `@shared/ui`, `@shared/query`, `@/shared/utils`.
 Сквозной barrel там даёт циклические импорты и тормозит dev-сервер.

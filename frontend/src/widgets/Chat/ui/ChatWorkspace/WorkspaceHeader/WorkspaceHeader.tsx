@@ -1,4 +1,4 @@
-import { Avatar } from '@uiKit'
+import { Avatar } from '@shared/ui'
 
 import type { ChatUser } from '@/entities/chat'
 

@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react'
 
-import { TextInput } from '@uiKit'
+import { TextInput } from '@shared/ui'
 
 import { useCreateComment } from '../model/useCreateComment'
 

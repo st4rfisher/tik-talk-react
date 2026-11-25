@@ -1,4 +1,4 @@
-import { Avatar } from '@uiKit'
+import { Avatar } from '@shared/ui'
 
 import { formatDateTime } from '@/shared/utils'
 import type { CommentData } from '../../model/types'

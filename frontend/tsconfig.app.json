@@ -16,7 +16,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@uiKit": ["./src/shared/ui/components/index.ts"],
+      "@shared/query": ["./src/shared/query/index.ts"],
+      "@shared/ui": ["./src/shared/ui/index.ts"],
       "@/*": ["./src/*"]
     },
 

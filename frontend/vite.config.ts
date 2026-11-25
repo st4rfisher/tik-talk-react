@@ -11,7 +11,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@uiKit': fileURLToPath(new URL('./src/shared/ui/components', import.meta.url)),
+      '@shared/query': fileURLToPath(new URL('./src/shared/query', import.meta.url)),
+      '@shared/ui': fileURLToPath(new URL('./src/shared/ui', import.meta.url)),
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },

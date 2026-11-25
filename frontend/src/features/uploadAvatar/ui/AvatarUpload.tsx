@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useRef, useState, type ChangeEvent, type DragEvent, type KeyboardEvent } from 'react'
 
-import { Avatar, Icon } from '@uiKit'
+import { Avatar, Icon } from '@shared/ui'
 
 import styles from './AvatarUpload.module.scss'
 

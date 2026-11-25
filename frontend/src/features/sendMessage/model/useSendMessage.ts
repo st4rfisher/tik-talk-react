@@ -1,9 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
+import { invalidateQueries } from '@shared/query'
+
 import { chatApi, chatQueries } from '@/entities/chat'
 import { profileQueries } from '@/entities/profile'
-import { invalidateQueries } from '@/shared/query/queryClient'
 
 export function useSendMessage(chatId: number) {
   const [text, setText] = useState('')
