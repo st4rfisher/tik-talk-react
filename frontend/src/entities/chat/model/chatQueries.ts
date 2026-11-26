@@ -10,4 +10,10 @@ export const chatQueries = {
       queryKey: [...chatQueries.all()] as const,
       queryFn: () => chatApi.getMyChats(),
     }),
+
+  getChatById: (chatId: number) =>
+    queryOptions({
+      queryKey: [...chatQueries.all(), chatId] as const,
+      queryFn: () => chatApi.getChatById(chatId),
+    }),
 }
