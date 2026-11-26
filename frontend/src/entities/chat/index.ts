@@ -19,4 +19,3 @@ export type {
 } from './model/types'
 
 export { ChatListItem } from './ui/ChatListItem/ChatListItem'
-export { ChatMessageItem } from './ui/ChatMessageItem/ChatMessageItem'

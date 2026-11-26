@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 
-import { ChatMessageItem } from '@/entities/chat'
+import { Avatar } from '@shared/ui'
+
 import { SendMessageForm } from '@/features/sendMessage'
 
 import { useChatWorkspace } from '../../../model/useChatWorkspace'
@@ -36,7 +37,18 @@ export function WorkSpaceArea() {
       <div className={styles.messages}>
         <div className={styles['messages-wrapper']}>
           {chat.messages.map((message) => (
-            <ChatMessageItem key={message.id} message={message} />
+            <article
+              key={message.id}
+              className={clsx(styles.message, message.isMine && styles['message--mine'])}
+            >
+              <Avatar url={message.user?.avatarUrl} size={32} alt={message.user?.username ?? ''} />
+              <div className={styles['message-container']}>
+                <span className={clsx('medium-text', styles['medium-text'])}>
+                  {message.user?.firstName} {message.user?.lastName} {formatDateTime(message.createdAt)}
+                </span>
+                <span className={styles['message-text']}>{message.text}</span>
+              </div>
+            </article>
           ))}
         </div>
         <div className={styles.composer}>
