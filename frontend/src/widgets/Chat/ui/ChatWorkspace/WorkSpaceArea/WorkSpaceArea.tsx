@@ -3,13 +3,14 @@ import clsx from 'clsx'
 import { Avatar } from '@shared/ui'
 
 import { SendMessageForm } from '@/features/sendMessage'
+import { formatDateTime } from '@/shared/utils'
 
-import { useChatWorkspace } from '../../../model/useChatWorkspace'
+import { useWorkSpaceArea } from '../../../model/useWorkSpaceArea'
 import { WorkspaceHeader } from '../WorkspaceHeader/WorkspaceHeader'
 import styles from './WorkSpaceArea.module.scss'
 
 export function WorkSpaceArea() {
-  const { chat, hasSelection, isPending, isError } = useChatWorkspace()
+  const { chat, hasSelection, isPending, isError } = useWorkSpaceArea()
 
   if (!hasSelection) {
     return <div className={styles.workspace} />
