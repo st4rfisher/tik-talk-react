@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { SearchInput } from '@shared/ui'
@@ -14,11 +15,18 @@ export function ChatsList() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { data: chats, isPending, isError } = useChats()
+  const [filteredChats, setFilteredChats] = useState(chats)
 
   return (
     <div className={styles['chats-list']}>
       <div className={styles['chats-input']}>
-        <SearchInput id="chat-search" placeholder="Поиск чатов" />
+        <SearchInput
+          id="chat-search"
+          placeholder="Поиск чатов"
+          items={chats}
+          getSearchText={(chat) => `${chat.userFrom.lastName} ${chat.userFrom.firstName}`}
+          onSearch={setFilteredChats}
+        />
       </div>
       <div className={styles['wrapper']}>
         {isPending ? (
@@ -26,7 +34,7 @@ export function ChatsList() {
         ) : isError ? (
           <p className={clsx('regular-text', styles['status'])}>Не удалось загрузить чаты</p>
         ) : (
-          chats?.map((chat) => (
+          filteredChats?.map((chat) => (
             <ChatListItem
               key={chat.id}
               chatData={chat}
