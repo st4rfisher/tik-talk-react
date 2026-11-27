@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router'
 
-import { chatApi, mapChat, useChat } from '@/entities/chat'
+import { chatMutations, mapChat, useChat } from '@/entities/chat'
 import { useProfile } from '@/entities/profile'
 
-export function useWorkSpaceArea() {
+export function useWorkspaceArea() {
   const { id } = useParams()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()

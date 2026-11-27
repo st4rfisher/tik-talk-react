@@ -1,2 +1,2 @@
-export { WorkSpaceArea } from './WorkSpaceArea/WorkSpaceArea'
+export { WorkspaceArea } from './WorkspaceArea/WorkspaceArea'
 export { WorkspaceHeader } from './WorkspaceHeader/WorkspaceHeader'

@@ -5,12 +5,12 @@ import { Avatar } from '@shared/ui'
 import { SendMessageForm } from '@/features/sendMessage'
 import { formatDateTime } from '@/shared/utils'
 
-import { useWorkSpaceArea } from '../../../model/useWorkSpaceArea'
+import { useWorkspaceArea } from '../../../model/useWorkspaceArea'
 import { WorkspaceHeader } from '../WorkspaceHeader/WorkspaceHeader'
 import styles from './WorkSpaceArea.module.scss'
 
-export function WorkSpaceArea() {
-  const { chat, hasSelection, isPending, isError } = useWorkSpaceArea()
+export function WorkspaceArea() {
+  const { chat, hasSelection, isPending, isError } = useWorkspaceArea()
 
   if (!hasSelection) {
     return <div className={styles.workspace} />

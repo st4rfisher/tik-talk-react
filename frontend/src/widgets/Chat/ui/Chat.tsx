@@ -1,11 +1,11 @@
 import { ChatsList } from './ChatsList/ChatsList'
-import { WorkSpaceArea } from './ChatWorkspace'
+import { WorkspaceArea } from './ChatWorkspace'
 
 export function Chat() {
   return (
     <>
       <ChatsList />
-      <WorkSpaceArea />
+      <WorkspaceArea />
     </>
   )
 }
