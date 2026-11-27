@@ -1,4 +1,6 @@
-import { queryOptions } from '@tanstack/react-query'
+import { mutationOptions, queryOptions } from '@tanstack/react-query'
+
+import { invalidateQueries } from '@shared/query'
 
 import { postApi } from '../api/post'
 
@@ -19,5 +21,19 @@ export const postQueries = {
     queryOptions({
       queryKey: ['comments', postId] as const,
       queryFn: () => postApi.getCommentsByPostId(postId),
+    }),
+}
+
+export const postMutations = {
+  createPost: () =>
+    mutationOptions({
+      mutationFn: postApi.createPost,
+      onSuccess: () => invalidateQueries(postQueries.allPosts()),
+    }),
+
+  createComment: () =>
+    mutationOptions({
+      mutationFn: postApi.createComment,
+      onSuccess: () => invalidateQueries(postQueries.allPosts()),
     }),
 }
