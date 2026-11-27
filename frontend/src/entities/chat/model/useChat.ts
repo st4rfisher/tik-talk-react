@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { chatQueries } from './chatQueries'
+import { chatQueries } from './chatRequests'
 
 export function useChat(chatId: string | undefined) {
   const numericId = Number(chatId)
@@ -10,7 +10,6 @@ export function useChat(chatId: string | undefined) {
     enabled: isEnabled,
   })
 
-  console.log(chatQuery)
   return {
     chatQuery
   }

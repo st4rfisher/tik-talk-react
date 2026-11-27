@@ -16,19 +16,18 @@ export function useWorkspaceArea() {
   const { data: profile, isPending: isProfilePending } = useProfile('me')
   const { chatQuery } = useChat(id)
 
-  const createChat = useMutation({
-    mutationFn: chatApi.createChat,
-    onSuccess: (chat) => {
-      navigate(`/chats/${chat.id}`, { replace: true })
-    },
-  })
+  const createChat = useMutation(chatMutations.createChat())
 
   useEffect(() => {
     if (!isNewChat || !userId || isChatStarted.current) return
 
     isChatStarted.current = true
-    createChat.mutate(Number(userId))
-  }, [isNewChat, userId, createChat.mutate])
+    createChat.mutate(Number(userId), {
+      onSuccess: (chat) => {
+        navigate(`/chats/${chat.id}`, { replace: true })
+      },
+    })
+  }, [isNewChat, userId, createChat.mutate, navigate])
 
   return {
     chat: chatQuery.data && profile ? mapChat(chatQuery.data, profile.id) : undefined,

@@ -1,6 +1,6 @@
 export { chatApi } from './api/chat'
 
-export { chatQueries } from './model/chatQueries'
+export { chatMutations, chatQueries } from './model/chatRequests'
 export {
   handleWSMessage,
   isNewMessage,

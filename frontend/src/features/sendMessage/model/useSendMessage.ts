@@ -1,29 +1,21 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-import { invalidateQueries } from '@shared/query'
-
-import { chatApi, chatQueries } from '@/entities/chat'
+import { chatMutations } from '@/entities/chat'
 import { profileQueries } from '@/entities/profile'
 
 export function useSendMessage(chatId: number) {
   const [text, setText] = useState('')
   const { data: me } = useQuery(profileQueries.getProfileById('me'))
-
-  const mutation = useMutation({
-    mutationFn: (message: string) => chatApi.sendMessage(chatId, message),
-    onSuccess: async () => {
-      setText('')
-      await invalidateQueries(chatQueries.getChatById(chatId).queryKey)
-      await invalidateQueries(chatQueries.getMyChats().queryKey)
-    },
-  })
+  const sendMessage = useMutation(chatMutations.sendMessage(chatId))
 
   function submit() {
     const trimmedText = text.trim()
-    if (!trimmedText || mutation.isPending) return
+    if (!trimmedText || sendMessage.isPending) return
 
-    mutation.mutate(trimmedText)
+    sendMessage.mutate(trimmedText, {
+      onSuccess: () => setText(''),
+    })
   }
 
   return {
@@ -31,6 +23,6 @@ export function useSendMessage(chatId: number) {
     setText,
     submit,
     avatarUrl: me?.avatarUrl ?? null,
-    isPending: mutation.isPending,
+    isPending: sendMessage.isPending,
   }
 }
