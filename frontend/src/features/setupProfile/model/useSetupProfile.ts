@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 
-import { profileApi, profileQueries, useProfile, type Profile } from '@/entities/profile'
+import { profileMutations, profileQueries, useProfile, type Profile } from '@/entities/profile'
 import { queryClient } from '@/shared/query'
 
 import { setupProfileDefaultValues, setupProfileFormValues, setupProfileSchema } from './schema'
@@ -14,22 +15,14 @@ export function useSetupProfile(onSuccessFn: () => void, onSave?: () => Promise<
     values: profile,
     resetOptions: { keepDirtyValues: true },
   })
-
+  const patchProfile = useMutation(profileMutations.patchProfileData())
+  
   const submit = form.handleSubmit(async (formValues) => {
     try {
       await onSave?.()
-      const updatedProfileData = await profileApi.patchProfileData(formValues)
-      const queryKey = profileQueries.getProfileById('me').queryKey
-      const currentProfileData = queryClient.getQueryData<Profile>(queryKey)
-      const newProfileData: Profile = currentProfileData
-        ? { 
-            ...currentProfileData, 
-            ...formValues, 
-            ...updatedProfileData, 
-            avatarUrl: currentProfileData.avatarUrl 
-          }
-        : updatedProfileData
-      queryClient.setQueryData(queryKey, newProfileData)
+      const updatedProfileData = await patchProfile.mutateAsync(formValues)
+      const newProfileData = queryClient.getQueryData<Profile>(profileQueries.getProfileById('me').queryKey) ?? updatedProfileData
+      
       form.reset(setupProfileFormValues(newProfileData))
       onSuccessFn()
     } catch (error) {

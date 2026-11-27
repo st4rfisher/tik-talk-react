@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { profileQueries } from './profileQueries'
+import { profileQueries } from './profileRequests'
 import type { Profile } from './types'
 
 export function checkIsMyProfile(id: string | undefined, profile: Profile | undefined) {

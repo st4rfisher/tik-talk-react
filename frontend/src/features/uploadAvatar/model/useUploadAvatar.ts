@@ -1,11 +1,12 @@
+import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
-import { profileApi, profileQueries, useProfile, type Profile } from '@/entities/profile'
-import { queryClient } from '@/shared/query'
+import { profileMutations, useProfile } from '@/entities/profile'
 import { imageUrl } from '@/shared/utils'
 
 export function useUploadAvatar() {
   const { data: profile } = useProfile('me')
+  const uploadAvatar = useMutation(profileMutations.uploadAvatar())
   const [file, setFile] = useState<File | null>(null)
   const [localPreview, setLocalPreview] = useState<string | null>(null)
 
@@ -25,15 +26,7 @@ export function useUploadAvatar() {
   async function upload() {
     if (!file) return
 
-    const updated = await profileApi.uploadAvatar(file)
-    const queryKey = profileQueries.getProfileById('me').queryKey
-
-    queryClient.setQueryData<Profile>(queryKey, (current) =>
-      current ? { 
-        ...current, 
-        ...updated 
-      } : updated,
-    )
+    await uploadAvatar.mutateAsync(file)
     setFile(null)
     setLocalPreview(null)
   }

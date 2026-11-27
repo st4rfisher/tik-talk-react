@@ -9,6 +9,10 @@ export const queryClient = new QueryClient({
   },
 })
 
+const getKey = (
+  entity: string, 
+  key: QueryKey, 
+  type: 'MUTATION' | 'QUERY') => `${entity}__${key}__${type}`;
 
 export function invalidateQueries(queryKey: QueryKey) {
   return queryClient.invalidateQueries({ queryKey: queryKey })

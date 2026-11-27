@@ -1,5 +1,5 @@
 export { profileApi } from './api/profile'
-export { profileQueries } from './model/profileQueries'
+export { profileMutations, profileQueries } from './model/profileRequests'
 export type { Profile } from './model/types'
 export { useProfile } from './model/useProfile'
 export { useSubscribers } from './model/useSubscribers'
